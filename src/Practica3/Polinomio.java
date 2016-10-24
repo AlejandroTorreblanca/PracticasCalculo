@@ -14,6 +14,7 @@ package Practica3;
 
 import ORG.netlib.math.complex.Complex;
 import Practica2.*;
+import com.sun.corba.se.impl.oa.poa.Policies;
 
 //import java.util.*;   
 
@@ -229,16 +230,12 @@ public class Polinomio implements Funcion{
             for (int i = 0; i < n; i++) {
                 suma[i] = coef[i].add(q.coef[i]);
             }
-            for (int i = n; i < k; i++) {
-                suma[i] = q.coef[i];
-            }
+            System.arraycopy(q.coef, n, suma, n, k - n);
         } else {
             for (int i = 0; i < m; i++) {
                 suma[i] = coef[i].add(q.coef[i]);
             }
-            for (int i = m; i < k; i++) {
-                suma[i] = coef[i];
-            }
+            System.arraycopy(coef, m, suma, m, k - m);
         }
         return new Polinomio(suma);
     }
@@ -413,15 +410,11 @@ public class Polinomio implements Funcion{
      */
     public Complex eval(Complex z) {
         
-	// falta determinar n=grado del polinomio
-
-
-        Complex z2 = new Complex(0); //para devolver el valor del polinomio en z
-
-        
-	// falta evaluar z2 con el mÃ©todo de Horner
-
-
+        int n=this.grado();
+        Complex z2 = new Complex(coef[n]); //para devolver el valor del polinomio en z
+        for (int i = n-1; i>=0; i--) {
+            z2=z2.mul(z).add(coef[i]);
+        }
         return z2;
     }
 
@@ -432,9 +425,45 @@ public class Polinomio implements Funcion{
     @Override
     public double eval(double x) {
      
-        return 0;
+        return this.eval(Complex.real(x)).re();
     }
 
+    /**
+     * Método para construir la lista de los factores de lagrange.
+     * @param xs
+     * @return 
+     */
+    public static Polinomio[] facLagrange(double[] xs)
+    {
+        int n=xs.length;
+        Polinomio[] factores= new Polinomio[n];
+        for (int i = 0; i < factores.length; i++) {
+            factores[i]=new Polinomio(1);
+            for (int j = 0; j < n; j++) {
+                double[] coef={-xs[j],1};
+                Polinomio factor=new Polinomio(coef).producto(1./(xs[i]-xs[j]));
+                factores[i]=factores[i].producto(factor);
+            }
+        }
+        return factores;
+    }
+    
+    public static Polinomio interpoladorLagrange(double [][] xys)
+    {
+        int n=xys.length;
+        double[] xs=new double[n];
+        double[] ys=new double[n];
+        for (int i = 0; i < ys.length; i++) {
+            ys[i]=xys[i][0];
+            xs[i]=xys[i][1];
+        }
+        Polinomio[] L=facLagrange(xs);
+        Polinomio interpol=new Polinomio();
+        for (int i = 0; i < L.length; i++) {
+            interpol=interpol.suma(L[i].producto(ys[i])); 
+        }
+        return interpol;
+    }
    
     /* Exception para ser lanzada por los distintos metodos */
     public static class ErrorPolinomios extends Exception {
