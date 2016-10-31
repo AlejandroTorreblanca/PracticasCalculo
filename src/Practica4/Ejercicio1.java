@@ -3,24 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Practica3;
+package Practica4;
 import Auxiliar.*;
 /**
  *
- * @author Alexjandro
+ * @author Alejandro
  */
-public class Ejercicio2 {
+public class Ejercicio1 {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        double[] xs={1,2,3};
-        Polinomio[] fact =Polinomio.facLagrange(xs);
-        for (int i = 0; i < fact.length; i++) {
-                System.out.println("L_"+i+"(xs)"+ fact[i].escribe());
-        }
+        // TODO code application logic here
     }
     
 }

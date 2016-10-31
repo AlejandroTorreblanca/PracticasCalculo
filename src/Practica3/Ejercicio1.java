@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 package Practica3;
-
+import Auxiliar.*;
 import ORG.netlib.math.complex.Complex;
-import Practica2.PanelDibujo;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -27,7 +26,7 @@ public class Ejercicio1 {
         System.out.println("p(z)="+ p.eval(x));
         
         PanelDibujo pd=new PanelDibujo("Apartado 1 del Ejercicio 4");
-         pd.addWindowListener(
+        pd.addWindowListener(
                 new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {

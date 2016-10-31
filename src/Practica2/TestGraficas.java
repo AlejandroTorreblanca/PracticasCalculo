@@ -13,7 +13,7 @@ import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.*;
 import javax.swing.*;
-
+import Auxiliar.*;
 /**
  * El objetivo de esta aplicacion es usar un panel de dibujo (instanciando
  * un objeto de la clase PanelDibujo) para pintar la grafica de la funcion seno,

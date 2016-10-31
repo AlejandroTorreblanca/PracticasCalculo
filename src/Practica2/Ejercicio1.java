@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Practica2;
-
+import Auxiliar.*;
 /**
  *
  * @author Alejandro Torreblanca

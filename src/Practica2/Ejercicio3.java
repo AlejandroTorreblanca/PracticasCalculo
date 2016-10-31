@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Practica2;
-
+import Auxiliar.*;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
