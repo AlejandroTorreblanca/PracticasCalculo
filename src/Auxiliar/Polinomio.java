@@ -1,47 +1,39 @@
 /**
  * Polinomio.java
  *
- * Modificado el 16 de diciembre de 2004, 12:35
- * Modificado el 14 de enero de 2005, 22:15
- * Modificado en enero/febrero de 2006
- * Modificado en abril de 2007
- * Modificado en abril de 2008
- * Modificado en Marzo de 2009
- * Modificado en octubre de 2009
- * VERSION INICIAL para practica 2 (2009-2010).
+ * Modificado el 16 de diciembre de 2004, 12:35 Modificado el 14 de enero de
+ * 2005, 22:15 Modificado en enero/febrero de 2006 Modificado en abril de 2007
+ * Modificado en abril de 2008 Modificado en Marzo de 2009 Modificado en octubre
+ * de 2009 VERSION INICIAL para practica 2 (2009-2010).
  */
-package Auxiliar;
+package auxiliar;
 
 import ORG.netlib.math.complex.Complex;
 
-
 //import java.util.*;   
-
- /**
- *
- * @author  Alumnos de "Metodos Numericos" desde 2002-2003,
- *          profesores:  Victor Jimenez y Antonio Pallares.
- *
- * utiliza la clase Complex creada por   Alexander Anderson
- * Copyright (c) 1997 - 2001, depositada en NETLIB
- *
- * METODOS NUMERICOS
- * LICENCIATURA DE MATEMATICAS
- * UNIVERSIDAD DE MURCIA
- */
-
 /**
- * Cada objeto polinomio p(x)=a0 + a1 x + a2 x^2 + ... + ak x^k
- * tiene como atributo una sucesion de numeros complejos
- * con sus coeficientes {a0,a1,...,ak}
+ *
+ * @author Alumnos de "Metodos Numericos" desde 2002-2003, profesores: Victor
+ * Jimenez y Antonio Pallares.
+ *
+ * utiliza la clase Complex creada por Alexander Anderson Copyright (c) 1997 -
+ * 2001, depositada en NETLIB
+ *
+ * METODOS NUMERICOS LICENCIATURA DE MATEMATICAS UNIVERSIDAD DE MURCIA
  */
-public class Polinomio implements Funcion{
+/**
+ * Cada objeto polinomio p(x)=a0 + a1 x + a2 x^2 + ... + ak x^k tiene como
+ * atributo una sucesion de numeros complejos con sus coeficientes
+ * {a0,a1,...,ak}
+ */
+public class Polinomio implements Funcion {
 
     public Complex[] coef;
     static double precision = 5E-16;
 
     /**
-     * Constructor de un objeto Polinomio. <p>
+     * Constructor de un objeto Polinomio.
+     * <p>
      * Por defecto es el polinomio nulo.
      */
     public Polinomio() {
@@ -50,18 +42,18 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Sobrecarga del Constructor de un objeto Polinomio. <p>
-     * Polinomio(coeficientes) crea el polinomio cuyos coeficientes son
-     * los reales de la lista "coeficientes".
-     * @param coeficientes
+     * Sobrecarga del Constructor de un objeto Polinomio.
+     * <p>
+     * Polinomio(coeficientes) crea el polinomio cuyos coeficientes son los
+     * reales de la lista "coeficientes".
      */
     public Polinomio(double[] coeficientes) {
         int n = coeficientes.length;
         coef = new Complex[n];
 
         /**
-         * Comenzamos eliminando los ceros superfluos de la sucesion
-         * de coeficientes
+         * Comenzamos eliminando los ceros superfluos de la sucesion de
+         * coeficientes
          */
         for (int j = n - 1; j > 0; j--) {
             if (Math.abs(coeficientes[j]) < precision) {
@@ -77,13 +69,12 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Sobrecarga del Constructor de un objeto Polinomio. <p>
-     * Polinomio(coeficientes) crea el polinomio cuyos coeficientes
-     * son los complejos de la lista "coeficientes".
-     * @param coeficientes
+     * Sobrecarga del Constructor de un objeto Polinomio.
+     * <p>
+     * Polinomio(coeficientes) crea el polinomio cuyos coeficientes son los
+     * complejos de la lista "coeficientes".
      */
-    
-     public Polinomio(Complex[] coeficientes) {
+    public Polinomio(Complex[] coeficientes) {
         int n = coeficientes.length;
 
         for (int j = n - 1; j > 0; j--) {
@@ -100,11 +91,10 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Sobrecarga del Constructor de un objeto Polinomio. <p>
+     * Sobrecarga del Constructor de un objeto Polinomio.
+     * <p>
      * Polinomio(q) crea un polinomio con los mismos coeficientes que q.
-     * @param q
      */
-    
     public Polinomio(Polinomio q) {
         int n = q.coef.length;
         coef = new Complex[n];
@@ -115,9 +105,9 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Sobrecarga del Constructor de un objeto Polinomio. <p>
+     * Sobrecarga del Constructor de un objeto Polinomio.
+     * <p>
      * Polinomio(z) crea un polinomio constante igual al complejo z.
-     * @param z
      */
     public Polinomio(Complex z) {
         coef = new Complex[1];
@@ -126,9 +116,9 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Sobrecarga del Constructor de un objeto Polinomio. <p>
+     * Sobrecarga del Constructor de un objeto Polinomio.
+     * <p>
      * Polinomio(x) crea un polinomio constante igual al real x.
-     * @param x
      */
     public Polinomio(double x) {
         coef = new Complex[1];
@@ -137,11 +127,11 @@ public class Polinomio implements Funcion{
     }
 
     /**
-    Metodo para obtener el grado del polinomio <p>
-    *
-    * USO   p.grado()
-     * @return 
-    */
+     * Metodo para obtener el grado del polinomio
+     * <p>
+     *
+     * USO p.grado()
+     */
     public int grado() {
         return coef.length - 1;
     }
@@ -151,13 +141,12 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * MÃ©todo para escribir un polinomio. <p>
-     * Construye una cadena de caracteres (String) en la
-     * que aparece escrito el polinomio.
+     * Método para escribir un polinomio.
+     * <p>
+     * Construye una cadena de caracteres (String) en la que aparece escrito el
+     * polinomio.
      *
-     * USO 
-     * p.escribe()
-     * @return 
+     * USO p.escribe()
      */
     public String escribe() {
         Complex[] y = coef;
@@ -171,16 +160,12 @@ public class Polinomio implements Funcion{
                 continue; // evita escribir sumandos nulos
             }
             aux = "";
-            switch (k) {
-                case 0:
-                    aux = ""; // tÃ©rmino independiente
-                    break;
-                case 1:
-                    aux = " x"; // primera potencia
-                    break;
-                default:
-                    aux = " x^" + k; // resto de potencias
-                    break;
+            if (k == 0) {
+                aux = ""; // término independiente
+            } else if (k == 1) {
+                aux = " x"; // primera potencia
+            } else {
+                aux = " x^" + k; // resto de potencias
             }
             if (k == m - 1) {
                 aux = aux + " )";
@@ -199,24 +184,19 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Sobrecarga del mÃ©todo toString para que pueda escribirse directamente
-     * el polinomio
+     * Sobrecarga del método toString para que pueda escribirse directamente el
+     * polinomio
      */
-    @Override
     public String toString() {
         return escribe();
     }
 
-     /**
-     * MÃ©todo suma para sumar dos polinomios
+    /**
+     * Método suma para sumar dos polinomios
      *
-     * DATOS DE ENTRADA
-     * Polinomio q
+     * DATOS DE ENTRADA Polinomio q
      *
-     * USO
-     * p.suma(q) proporciona el Polinomio p+q
-     * @param q
-     * @return 
+     * USO p.suma(q) proporciona el Polinomio p+q
      */
     public Polinomio suma(Polinomio q) {
         Complex[] suma;
@@ -229,56 +209,58 @@ public class Polinomio implements Funcion{
             for (int i = 0; i < n; i++) {
                 suma[i] = coef[i].add(q.coef[i]);
             }
-            System.arraycopy(q.coef, n, suma, n, k - n);
+            for (int i = n; i < k; i++) {
+                suma[i] = q.coef[i];
+            }
         } else {
             for (int i = 0; i < m; i++) {
                 suma[i] = coef[i].add(q.coef[i]);
             }
-            System.arraycopy(coef, m, suma, m, k - m);
+            for (int i = m; i < k; i++) {
+                suma[i] = coef[i];
+            }
         }
         return new Polinomio(suma);
     }
- 
+
     /**
-     * Sobrecarga el metodo suma como metodo estatico
-     * que define el operador binario suma
-     * 
+     * Sobrecarga el metodo suma como metodo estatico que define el operador
+     * binario suma
+     *
      * @param p
      * @param q
-     * @return  p.suma(q)
-     * 
-     * Uso  Polinomio.suma(p,q) que equivale a 
+     * @return p.suma(q)
+     *
+     * Uso Polinomio.suma(p,q) que equivale a
      */
-    public static Polinomio suma(Polinomio p,Polinomio q){
+    public static Polinomio suma(Polinomio p, Polinomio q) {
 
-    	return p.suma(q);
+        return p.suma(q);
     }
 
     /**
      * Metodo resta para restar dos polinomios
      *
-     * DATOS DE ENTRADA
-     * Polinomio q
+     * DATOS DE ENTRADA Polinomio q
      *
-     * USO
-     * p.resta(q) proporciona el Polinomio p-q
-     * @param q
+     * USO p.resta(q) proporciona el Polinomio p-q
      */
     public Polinomio resta(Polinomio q) {
 
         return new Polinomio(suma(q.producto(-1)));
     }
 
-
-
-
     /**
-     * MÃ©todo para multiplicar dos polinomios <p>
+     * Método para multiplicar dos polinomios
+     * <p>
      *
-     * DATOS DE ENTRADA <p>
-     * Polinomio q <p>
+     * DATOS DE ENTRADA
+     * <p>
+     * Polinomio q
+     * <p>
      *
-     * USO <p>
+     * USO
+     * <p>
      * p.producto(q) proporciona el Polinomio pq
      */
     public Polinomio producto(Polinomio q) {
@@ -304,13 +286,17 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Sobrecarga del mÃ©todo producto para multiplicar
-     * un polinomio por un escalar <p>
+     * Sobrecarga del método producto para multiplicar un polinomio por un
+     * escalar
+     * <p>
      *
-     * DATOS DE ENTRADA <p>
-     * Complex z <p>
+     * DATOS DE ENTRADA
+     * <p>
+     * Complex z
+     * <p>
      *
-     * USO <p>
+     * USO
+     * <p>
      * p.producto(z) proporciona el Polinomio pq
      */
     public Polinomio producto(Complex z) {
@@ -324,9 +310,9 @@ public class Polinomio implements Funcion{
         return new Polinomio(pq);
     }
 
-     /**
-     * Sobrecarga del mÃ©todo producto para multiplicar
-     * un polinomio por un escalar real
+    /**
+     * Sobrecarga del método producto para multiplicar un polinomio por un
+     * escalar real
      */
     public Polinomio producto(double x) {
         Complex z = new Complex(x, 0);
@@ -350,15 +336,17 @@ public class Polinomio implements Funcion{
         }
     }
 
-   
-
     /**
-     * Metodo para dividir dos polinomios <p>
+     * Metodo para dividir dos polinomios
+     * <p>
      *
-     * DATOS DE ENTRADA <p>
-     * Polinomio q <p>
+     * DATOS DE ENTRADA
+     * <p>
+     * Polinomio q
+     * <p>
      *
-     * UTILIZACION <p>
+     * UTILIZACION
+     * <p>
      * p.div(q) proporciona el resto y el cociente de p/q
      */
     public Polinomio[] div(Polinomio divisor) throws ErrorPolinomios {
@@ -394,8 +382,8 @@ public class Polinomio implements Funcion{
             cociente[j] = resto[m + j - 1].div(divisor.coef[m - 1]);
             resto[m + j - 1] = new Complex(0);
             for (int h = m - 2; h >= 0; h--) {
-                resto[j + h] =
-                        resto[j + h].sub(divisor.coef[h].mul(cociente[j]));
+                resto[j + h]
+                        = resto[j + h].sub(divisor.coef[h].mul(cociente[j]));
             }
         }
         div[0] = new Polinomio(resto);
@@ -404,85 +392,65 @@ public class Polinomio implements Funcion{
     }
 
     /**
-     * Metodo de evaluacion de polinomios
-     * con coeficientes y variable compleja
+     * Metodo de evaluacion de polinomios con coeficientes y variable compleja
      */
     public Complex eval(Complex z) {
-        
-        int n=this.grado();
+
+	// falta determinar n=grado del polinomio
+        int n = this.grado();
+
         Complex z2 = new Complex(coef[n]); //para devolver el valor del polinomio en z
-        for (int i = n-1; i>=0; i--) {
-            z2=z2.mul(z).add(coef[i]);
+        for (int i = n - 1; i >= 0; i--) {
+            z2 = z2.mul(z).add(coef[i]);
         }
+
         return z2;
     }
 
     /**
-     * Sobrecarga del metodo eval para evaluar polinomios reales
-     * en variables reales devolviendo el nÃºmero real con el valor del polinomio
+     * Sobrecarga del metodo eval para evaluar polinomios reales en variables
+     * reales devolviendo el número real con el valor del polinomio
      */
-    @Override
     public double eval(double x) {
-     
         return this.eval(Complex.real(x)).re();
     }
-
     /**
-     * Método para construir la lista de los factores de lagrange.
+     * Metodo para construir la lista de los factores de lagrange correspondientes a una lista de 
+     * numeros reales
      * @param xs
      * @return 
      */
-//    public static Polinomio[] facLagrange(double[] xs)
-//    {
-//        int n=xs.length;
-//        Polinomio[] factores= new Polinomio[n];
-//        Polinomio factor;
-//        for (int i = 0; i < factores.length; i++) {
-//            factores[i]=new Polinomio(1);
-//            for (int j = 0; j < n; j++) {
-//                if(j!=i)
-//                {
-//                    double[] coef={1,-xs[j]};
-//                    double producto=1./(xs[i]-xs[j]);
-//                    factor=new Polinomio(coef);
-//                    factores[i]=factores[i].producto(factor);
-//                }
-//            }
-//        }
-//        return factores;
-//    }
-    
-    public static Polinomio[] facLagrange(double[] xs){
+    public static Polinomio[] facLagrange(double [] xs){
         int n=xs.length;
-        Polinomio[] factores=new Polinomio[n];
-        for (int i = 0; i < factores.length; i++) {
+        Polinomio[] factores= new Polinomio[n];
+        for(int i=0;i<factores.length;i++){
             factores[i]=new Polinomio(1);
-            for (int j = 0; j < n; j++) {
+            for(int j=0;j<n;j++){
                 double[] coef={-xs[j],1};
-                Polinomio factor=new Polinomio(coef).producto(1./(xs[i]-xs[j]));
+                if(j!=i){
+                Polinomio factor= new Polinomio(coef).producto(1./(xs[i]-xs[j]));
                 factores[i]=factores[i].producto(factor);
             }
         }
-        return factores;
-    }
-    
-    public static Polinomio interpoladorLagrange(double [][] xys)
-    {
+        }
+return factores;
+}
+    public static Polinomio interpoladorLagrange(double[][] xys){
         int n=xys.length;
         double[] xs=new double[n];
         double[] ys=new double[n];
-        for (int i = 0; i < ys.length; i++) {
-            ys[i]=xys[i][1];
+        for(int i=0;i<ys.length;i++){
             xs[i]=xys[i][0];
-        }
-        Polinomio[] L=facLagrange(xs);
-        Polinomio interpol=new Polinomio();
-        for (int i = 0; i < L.length; i++) {
-            interpol=interpol.suma(L[i].producto(ys[i])); 
+            ys[i]=xys[i][1];
+            
+        } 
+        Polinomio [] L=facLagrange(xs);
+        Polinomio interpol= new Polinomio();
+        for(int i=0;i<L.length;i++){
+            interpol=interpol.suma(L[i].producto(ys[i]));
         }
         return interpol;
     }
-   
     /* Exception para ser lanzada por los distintos metodos */
     public static class ErrorPolinomios extends Exception {
 

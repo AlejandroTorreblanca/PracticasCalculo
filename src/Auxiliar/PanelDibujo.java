@@ -4,7 +4,7 @@
  * Creado el 14 de mayo de 2006, 19:53
  * modificado el 17 de octubre de 2010
  */
-package Auxiliar;
+package auxiliar;
 
 /* Los siguientes paquetes se necesitan para usar el potencial grafico de JAVA */
 import java.awt.*;
@@ -41,13 +41,12 @@ public class PanelDibujo extends JFrame {
     ArrayList listaPuntos = new ArrayList();
     ArrayList listaColoresPuntos = new ArrayList();
     ArrayList listaGruesoPuntos = new ArrayList();
-    
-    //Modificado
     ArrayList listaEtiquetas = new ArrayList();
     ArrayList listaEtiquetasPosicion = new ArrayList();
     ArrayList listaEtiquetasColor = new ArrayList();
     ArrayList listaArcos = new ArrayList();
     ArrayList listaArcosColor = new ArrayList();
+    
     /**
      * En las variables siguientes guardaremos las coordenadas enteras <xsi,ysi> 
      * del pixel situado en el extremo superior izquierdo de la ventana y 
@@ -109,7 +108,6 @@ public class PanelDibujo extends JFrame {
     /**
      * Esta sobrecarga del constructor de PanelDibujo nos permite elegir 
      * el titulo de la ventana.
-     * @param etiqueta
      */
     public PanelDibujo(String etiqueta) {
         super(etiqueta);
@@ -122,11 +120,6 @@ public class PanelDibujo extends JFrame {
      * Esta sobrecarga del constructor de PanelDibujo nos permite elegir el 
      * titulo de la ventana su posicion y sus dimensiones en pixeles (coordenadas
      * enteras.
-     * @param etiqueta
-     * @param xsupizda
-     * @param yinfdcha
-     * @param xinfdcha
-     * @param ysupizda
      */
     public PanelDibujo(String etiqueta, int xsupizda, int ysupizda,
             int xinfdcha, int yinfdcha) {
@@ -142,7 +135,6 @@ public class PanelDibujo extends JFrame {
     /**
      * El metodo addEjesCoordenados permite modificar el valor de la variable
      * ejescoordenados para que se puedan pintar los ejes.
-     * @param dibuja
      */
     public void addEjesCoordenados(boolean dibuja) {
         ejescoordenados = dibuja;
@@ -151,11 +143,6 @@ public class PanelDibujo extends JFrame {
     /**
      * Esta sobrecarga del metodo addEjesCoordenados permite ademas elegir los
      * extremos de los ejes.
-     * @param dibuja
-     * @param extsupx
-     * @param extinfx
-     * @param extinfy
-     * @param extsupy
      */
     public void addEjesCoordenados(boolean dibuja, double extinfx,
             double extsupx, double extinfy, double extsupy) {
@@ -173,13 +160,6 @@ public class PanelDibujo extends JFrame {
     /**
      * Esta sobrecarga del metodo addEjesCoordenados permite ademas elegir 
      * el punto de cruce de los ejes.
-     * @param dibuja
-     * @param extinfx
-     * @param extsupx
-     * @param extinfy
-     * @param extsupy
-     * @param centrox
-     * @param centroy
      */
     public void addEjesCoordenados(boolean dibuja, double extinfx,
             double extsupx, double extinfy, double extsupy, double centrox,
@@ -198,15 +178,6 @@ public class PanelDibujo extends JFrame {
     /**
      * Esta sobrecarga del metodo addEjesCoordenados permite ademas elegir 
      * el tama~no de la cuadricula.
-     * @param dibuja
-     * @param extinfx
-     * @param centroy
-     * @param mallax
-     * @param extsupx
-     * @param extinfy
-     * @param mallay
-     * @param centrox
-     * @param extsupy
      */
     public void addEjesCoordenados(boolean dibuja, double extinfx,
             double extsupx, double extinfy, double extsupy, double centrox,
@@ -227,8 +198,6 @@ public class PanelDibujo extends JFrame {
      * de coordenadas (x,y). Recordad que el pixel <0,0> corresponde a la 
      * esquina superior izquierda de la ventana, y que aumentan segun nos 
      * desplazamos a la derecha y hacia abajo.
-     * @param x
-     * @return 
      */
     public int pixelx(double x) {
         return (int) Math.rint((xid - xsi) * (x - eix) / (esx - eix));
@@ -254,7 +223,6 @@ public class PanelDibujo extends JFrame {
      * una variable Double en String) y Math.rint (que redondea un valor double 
      * al valor int mas cercano) conseguimos que los numeros con los que 
      * etiquetamos los ejes tengan a lo sumo tres cifras decimales.
-     * @param g
      */
     public void dibujaEjes(Graphics g) {
 
@@ -297,8 +265,6 @@ public class PanelDibujo extends JFrame {
      * El metodo addCurva a~nade al ArrayList listaCurvas la familia de 
      * puntos xy[][] y al ArrayList listaColoresCurvas el Color que hemos 
      * elegido para pintar la poligonal que los conecta.
-     * @param color
-     * @param xy
      */
     public void addCurva(Color color, double[][] xy) {
         listaCurvas.add(xy);
@@ -309,11 +275,6 @@ public class PanelDibujo extends JFrame {
      * Esta sobrecarga del metodo addCurva calcula una malla de n puntos de la
      * grafica de la funcion f en el intervalo [extinf,extsup] y luego la a~nade 
      * al ArrayList listaCurvas (y al ArrayList listaColoresCurvas el color elegido).
-     * @param color
-     * @param f
-     * @param n
-     * @param extinf
-     * @param extsup
      */
     public void addCurva(Color color, Funcion f, int n, double extinf,
             double extsup) {
@@ -336,7 +297,6 @@ public class PanelDibujo extends JFrame {
      * El metodo removeCurva borra los elementos n (es decir, los n+1-esimos) 
      * de listaCurvas y listaColoresCurvas. No se hace uso de el en la 
      * aplicacion TestGraficos.
-     * @param n
      */
     public void removeCurva(int n) {
         listaCurvas.remove(n);
@@ -348,7 +308,6 @@ public class PanelDibujo extends JFrame {
      * correspondientes a las listas de puntos del ArrayList listaCurvas y con los
      * colores de listaColoresCurvas. Notese la sintaxis precisa que permite 
      * extraer el contenido de los vectores para poder manipularlo.
-     * @param g
      */
     public void dibujaCurvas(Graphics g) {
         double[][] xy;
@@ -359,21 +318,28 @@ public class PanelDibujo extends JFrame {
             g.setColor(color);
             for (int j = 1; j < xy.length; j++) {
                 g.drawLine(pixelx(xy[j - 1][0]), pixely(xy[j - 1][1]),
-                        pixelx(xy[j][0]), pixely(xy[j][1]));
+                        pixelx(xy[j][0]), pixely(xy[j][1])); ArrayList listaEtiquetas = new ArrayList();
+    ArrayList listaEtiquetasPosicion = new ArrayList();
+    ArrayList listaEtiquetasColor = new ArrayList();
+
+    ArrayList listaArcos = new ArrayList();
+    ArrayList listaArcosColor = new ArrayList();
+    
             }
         }
     } // acaba el metodo dibujaCurvas
+    // Para incluir en PanelDibujo.java
 
-//Modificado    
+// en la declaracion de variables junto a las listas de Curvas y Puntos
+
     
-    /**
-     * El metodo addPunto añade al ArrayList listaPuntos el punto xy
+ //  Antes del metodo paint incluir
+ 
+     /**
+     * El metodo addPunto a~nade al ArrayList listaPuntos el punto xy
      * al ArrayList listaColoresPuntos el Color que hemos 
      * elegido para pintar el punto que los conecta, y a la lista listaGruesoPuntos
      * el grosor.
-     * @param color
-     * @param xy
-     * @param grosor
      */
     public void addPunto(Color color, double[] xy, int grosor) {
         listaPuntos.add(xy);
@@ -386,8 +352,9 @@ public class PanelDibujo extends JFrame {
     }
 
     public void addListaPuntos(Color color, double[][] lista, int grosor) {
-        for (double[] lista1 : lista) {
-            addPunto(color, lista1, grosor);
+        for (int i = 0; i < lista.length; i++) {
+            addPunto(color, lista[i], grosor);
+
         }
     }   
     
@@ -417,7 +384,6 @@ public class PanelDibujo extends JFrame {
 
         }
     }
-    
 // UNA ETIQUETA EN NUESTROS PANELES DE DIBUJO ES UNA CADENA DE CARACTERES "String"
 // posicionada en un punto de coordenadas "reales" posicion={x,y} QUE SE ESCRIBIRA
 // USANDO UN color de la clase "Color".
@@ -496,14 +462,14 @@ public class PanelDibujo extends JFrame {
         }
     } 
     
-    /**
+// Por ultimo sustituye el método paint por este nuevo
+/**
      * Cada vez que el metodo paint sea invocado (mediante repaint) desde la
      * aplicacion limpiara la ventana, pintara los ejes coordenados (salvo 
      * que la variable ejescoordenados tenga el valor false) y pintara todas 
      * las curvas almacenadas en listaCurvas con los colores de 
      * listaColoresCurvas.
      */
-    @Override
     public void paint(Graphics g) {
         g.clearRect(0, 0, xid - xsi, yid - ysi);
         dibujaEjes(g);
@@ -512,4 +478,13 @@ public class PanelDibujo extends JFrame {
         dibujaPuntos(g);
         dibujaEtiquetas(g);
     } // acaba el metodo paint    
-}
+    
+
+    
+    
+    
+    
+    
+    
+} // acaba la clase PanelDibujo
+

@@ -3,13 +3,16 @@
  * and open the template in the editor.
  */
 
-package Auxiliar;
+package auxiliar;
 
 /**
  *
- * @author Alejandro
+ * @author antoniopallaresruiz
  */
 public class MetodosFunciones {
+
+
+
 
     public static double[][] tablaGrafica(Funcion f,int numpuntos, double a, double b){
         double[][] tabla=new double[numpuntos][2];
@@ -20,6 +23,8 @@ public class MetodosFunciones {
         }
         return tabla;
     }
+    
+// para incluir en MetodosFunciones.java
 
    public static double[][] tablaGraficaTchev(Funcion f,
             int N, double a, double b){
@@ -31,6 +36,7 @@ public class MetodosFunciones {
         }
         return tabla;
     }
+    
     public static class suma implements Funcion{
         Funcion f;
         Funcion g;
@@ -39,12 +45,11 @@ public class MetodosFunciones {
             f=f1;
             g=g1;
         }
-        @Override
         public double eval(double x){
             return f.eval(x)+g.eval(x);
         }
     }
-     public static class resta implements Funcion{
+public static class resta implements Funcion{
         Funcion f;
         Funcion g;
 
@@ -52,13 +57,11 @@ public class MetodosFunciones {
             f=f1;
             g=g1;
         }
-        @Override
         public double eval(double x){
             return f.eval(x)-g.eval(x);
         }
     }
-     
-     public static class producto implements Funcion{
+public static class producto implements Funcion{
         Funcion f;
         Funcion g;
 
@@ -66,23 +69,39 @@ public class MetodosFunciones {
             f=f1;
             g=g1;
         }
-        @Override
         public double eval(double x){
-            return f.eval(x)*g.eval(x);
+            return f.eval(x) * g.eval(x);
         }
     }
-     
-    public static class composicion implements Funcion{
+public static class division implements Funcion{
         Funcion f;
         Funcion g;
 
-        public composicion(Funcion f1,Funcion g1){
+        public division(Funcion f1,Funcion g1){
             f=f1;
             g=g1;
         }
-        @Override
+        public double eval(double x){
+            return f.eval(x) / g.eval(x);
+        }
+    }
+/**
+ * Es una clase para construir la composicion de dos funciones
+ * Uso es
+ * f.compuesta(g)
+ * para construir fog
+ */
+public static class compuesta implements Funcion{
+        Funcion f;
+        Funcion g;
+
+        public compuesta(Funcion f1,Funcion g1){
+            f=f1;
+            g=g1;
+        }
         public double eval(double x){
             return f.eval(g.eval(x));
         }
-    } 
+    }
+
 }

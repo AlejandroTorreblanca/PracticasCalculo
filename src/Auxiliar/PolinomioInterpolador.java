@@ -3,10 +3,9 @@
  * and open the template in the editor.
  */
 
-package Auxiliar;
+package auxiliar;
 
 import ORG.netlib.math.complex.Complex;
-
 
 /**
  *
@@ -74,20 +73,27 @@ public class PolinomioInterpolador extends Polinomio{
                       }else{  // si no se repiten los nodos
                           p[j]=(p[j]-p[j-1]) / (nodos[j] - nodos[j-k]);
                       }
+
                   }
+
               }
+
           }
         return p;
+
     }
+
+
+
 
     @Override
     public double eval(double x){
-       int n=coefFormaNewton.length-1;
-       double suma=coefFormaNewton[n];
-       for (int i = n-1; i >=0; i--) {
-           suma= coefFormaNewton[i]+suma*(x-nodos[i]);
-       }
-       return 0;
+        int n= coefFormaNewton.length-1;
+        double suma= coefFormaNewton[n];
+        for(int i=n-1;i>=0;i--){
+            suma = coefFormaNewton[i]+suma*(x-nodos[i]);
+        }
+        return suma;
     }
 
 

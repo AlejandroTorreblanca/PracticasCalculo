@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package Auxiliar;
+package auxiliar;
 
 /** Esta "interface" Funcion es un compromiso de que cualquier
  *  "clase" que la implemente va a tener un metodo
@@ -14,8 +14,11 @@ package Auxiliar;
  *    f.eval(x)  devolvera f(x).
  *
  *
- * @author Alejandro
+ * @author antoniopallaresruiz
  */
+
+
+
 
 public interface Funcion {
 
@@ -25,8 +28,6 @@ public interface Funcion {
     *  para evaluar las funciones en el real x
     *
     * f.eval(x)  devolvera f(x).
-     * @param x
-     * @return 
     */
     public double eval(double x);
 
