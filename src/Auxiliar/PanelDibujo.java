@@ -282,8 +282,31 @@ public class PanelDibujo extends JFrame {
         listaCurvas.add(xy);
         listaColoresCurvas.add(color);
 
-    } // acaba el metodo addCurva (sobrecarga)
+    } 
+    /**
+     * Podemos añadir cuvas en paramétricas.
+     * @param color
+     * @param x
+     * @param y
+     * @param n
+     * @param tinf
+     * @param tsup 
+     */
+    public void addCurva(Color color, Funcion x,Funcion y, int n, double tinf,
+            double tsup) {
+        double[][] xy = new double [n][2];
+        double paso=(tsup-tinf)/(n-1);
+        for (int i = 0; i < n; i++) {
+            double t=tinf + paso * i;
+            xy[i][0]=x.eval(t);
+            xy[i][1]=y.eval(t);
+            
+        }
+        listaCurvas.add(xy);
+        listaColoresCurvas.add(color);
 
+    }
+    
     /**
      * El metodo removeCurvas borra todos los elementos de listaCurvas y
      * listaColoresCurvas.
