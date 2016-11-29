@@ -10,7 +10,7 @@ import auxiliar.Polinomio;
 
 /**
  *
- * @author Alexjandro
+ * @author Alejandro
  */
 public class Ejercicio1 {
 
@@ -18,23 +18,28 @@ public class Ejercicio1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        double[] coef={1,32,-12,2.6,0,-9};
-        Polinomio p= new Polinomio(coef);
-        double[] d1=p.evalDerivadas(2, 2);
-        double[] d2=p.evalDerivadas(2, 4);
-        double[] d3=p.evalDerivadas(2, 6);
-        double[] d4=p.evalDerivadas(2, 7);
-        System.out.println("Derivada 2");
-        for (int i = 0; i < 2; i++) 
-            System.out.println("p["+i+"]= "+d1[i]);  
-        System.out.println("Derivada 4");
-        for (int i = 0; i < 4; i++) 
-            System.out.println("p["+i+"]= "+d2[i]);  
-        System.out.println("Derivada 6");
-        for (int i = 0; i < 6; i++) 
-            System.out.println("p["+i+"]= "+d3[i]);  
-        System.out.println("Derivada 7");
-        for (int i = 0; i < 7; i++) 
-            System.out.println("p["+i+"]= "+d4[i]);  
+        double[] coef={-9,0,2.6,-12,0,32,1};
+        Polinomio p = new Polinomio(coef);
+        double x=2;
+        int n=7;
+        double[] D = p.evalDerivadas(x, n);
+        for (int i = 0; i <= n; i++) {
+            System.out.println("derivada "+i+"ésima\t D[" + i + "]=" + D[i]);
+        }
+        System.out.println("Polinomio desarollado en potencias de (x-"+x+") ");
+        System.out.print("p(x) = "+ D[0]+" ");
+        Complex[] C = new Complex[D.length];
+        for (int i = 0; i <= n; i++) {
+            C[i]= new Complex(D[i]);
+        }
+        for (int i = 1; i <= Math.min(n,p.grado()); i++) { 
+            if(i%4==0)System.out.println("");
+            for (int j = i; j <= Math.min(n, p.grado()); j++) {
+                C[j]=C[j].scale(1./i);    
+            } 
+            System.out.print("+ "+C[i]+"(x - "+x+")^"+i);
+        }
+        System.out.println("");
+        System.out.println("p(x) = "+ p);
     }
 }

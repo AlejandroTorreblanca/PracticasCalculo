@@ -18,12 +18,30 @@ public class Ejercicio1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        double[] coef={-2,-5,7,-4,1};
-        Polinomio p= new Polinomio(coef);
-        Complex[] d=p.evalDerivadas(Complex.real(3), 4);
-        for (int i = 0; i < 4; i++) {
-            System.out.println("p["+i+"]= "+d[i]);
+         // TODO code application logic here
+        double[] coe = {-2, -5, 7, -4, 1};
+        Polinomio p = new Polinomio(coe);
+        double x=3;
+        int n=1;
+        Complex[] D = p.evalDerivadas(Complex.real(x), n);
+        for (int i = 0; i <= n; i++) {
+            System.out.println("derivada "+i+"ésima\t D[" + i + "]=" + D[i]);
         }
+        System.out.println("Polinomio desarollado en potencias de (x-"+x+") ");
+        System.out.print("p(x) = "+ D[0]+" ");
+        Complex[] C = new Complex[D.length];
+        for (int i = 0; i <= n; i++) {
+            C[i]= new Complex(D[i]);
+        }
+        for (int i = 1; i <= Math.min(n,p.grado()); i++) { 
+            if(i%4==0)System.out.println("");
+            for (int j = i; j <= Math.min(n, p.grado()); j++) {
+                C[j]=C[j].scale(1./i);    
+            } 
+            System.out.print("+ "+C[i]+"(x - "+x+")^"+i);
+        }
+        System.out.println("");
+        System.out.println("p(x) = "+ p);
 
     }
     

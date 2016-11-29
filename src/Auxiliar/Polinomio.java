@@ -459,25 +459,31 @@ return factores;
         }
     }
     
-    public Complex[] evalDerivadas(Complex x, int n)
-    {
-        Complex[] D= new Complex[n+1];
-        int m=grado();
-        for (int i = 0; i <=Math.min(m, n); i++) {
-            D[i]= new Complex(coef[m]);
+   public Complex[] evalDerivadas(Complex x, int n) {
+
+        Complex[] D = new Complex[n + 1];
+        int m = grado();
+        for (int i = 0; i <= Math.min(n, m); i++) {
+            D[i] = new Complex(this.coef[m]);
         }
-        int p=Math.min(m, n);
-        for (int c = m-1; c >= 0; c--) {
-            D[0]=coef[c].add(D[0].mul(x));
-            if (c<p) 
+        int p = Math.min(m, n);
+        for (int c = m - 1; c >= 0; c--) {
+            D[0] = this.coef[c].add(D[0].mul(x));
+            if (c < p) {
                 p--;
+            }
             for (int i = 1; i <= p; i++) {
-                D[i]=D[i-1].add(D[i].mul(x));
+                D[i] = D[i - 1].add(D[i].mul(x));
+            }
+        }
+        for (int i = 1; i <= Math.min(m, n); i++) {
+            for (int j = i; j <= Math.min(m, n); j++) {
+                D[j]=D[j].scale(i);    
             }
         }
         return D;
     }
-    
+   
     public double[] evalDerivadas(double x, int n)
     {
         double[] D= new double[n+1];
@@ -491,7 +497,12 @@ return factores;
             if (c<p) 
                 p--;
             for (int i = 1; i <= p; i++) {
-                D[i]=coef[i-1].re()+(D[i]*x);
+                 D[i]=D[i-1]+(D[i]*x);
+            }
+        }
+        for (int i = 1; i <= Math.min(m, n); i++) {
+            for (int j = i; j <= Math.min(m, n); j++) {
+                D[j]=D[j]*i;   
             }
         }
         return D;
