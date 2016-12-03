@@ -5,11 +5,7 @@
  */
 package cn1vPractica4;
 
-import auxiliar.Funcion;
-import auxiliar.MetodosFunciones;
-import auxiliar.PanelDibujo;
-import auxiliar.Polinomio;
-import auxiliar.PolinomioInterpolador;
+import auxiliar.*;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

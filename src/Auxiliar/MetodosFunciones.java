@@ -20,8 +20,6 @@ public class MetodosFunciones {
         }
         return tabla;
     }
-    
-// para incluir en MetodosFunciones.java
 
    public static double[][] tablaGraficaTchev(Funcion f,
             int N, double a, double b){
@@ -330,6 +328,85 @@ public static class compuesta implements Funcion{
                     integralAdaptada(f, m, b, precision/2, nProfundidad ); 
         }
         return integral0+integral1;
-    }  
+    } 
+      
+    public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol,int Na)
+    {
+        double APP=0;
+        int N=1000;
+        int i=1;
+        double[] TOL=new double[N];
+        double[] A=new double[N];
+        double[] h=new double[N];
+        double[] FA=new double[N];
+        double[] FB=new double[N];
+        double[] FC=new double[N];
+        double[] S=new double[N];
+        double[] L=new double[N];
+        double[] V=new double[10];
+        double FD,FE,S1,S2;
+        
+        A[i]=a;
+        h[i]=(b-a)/2;
+        FA[i]=f.eval(a);
+        FB[i]=f.eval(b);
+        FC[i]=f.eval(a+h[i]);
+        S[i]=h[i]*(FA[i]+4*FC[i]+FB[i])/3;
+        L[i]=1;
+        
+        while(i>0)
+        {
+            FD=f.eval((A[i]+h[i])/2);
+            FE=f.eval((A[i]+3*h[i])/2);
+            S1=h[i]*(FA[i]+4*FD+FC[i])/6;
+            S2=h[i]*(FC[i]+4*FE+FB[i])/6;
+            V[1]=A[i];
+            V[2]=FA[i];
+            V[3]=FC[i];
+            V[4]=FB[i];
+            V[5]=h[i];
+            V[6]=TOL[i];
+            V[7]=S[i];
+            V[8]=L[i];
+            
+            i-=1;             
+            
+            if(Math.abs(S1+S2-V[7])<V[6])
+              APP=APP+(S1+S2);  
+            else
+            {
+              if(V[8]>=Na)
+              {
+                  System.err.println("LEVEL EXCEDED");
+                  System.exit(1);
+              }
+              else
+              {
+                  i+=1;
+                  A[i]=V[1]+V[5];
+                  FA[i]=V[3];
+                  FC[i]=FE;
+                  FB[i]=V[4];
+                  h[i]=V[5]/2;
+                  TOL[i]=V[6]/2;
+                  S[i]=S2;
+                  L[i]=V[8]+1;
+                  
+                  i+=1;
+                  A[i]=V[1];
+                  FA[i]=V[2];
+                  FC[i]=FD;
+                  FB[i]=V[3];
+                  h[i]=h[i-1];
+                  TOL[i]=TOL[i-1];
+                  S[i]=S1;
+                  L[i]=L[i-1];
+              }
+            }
+        }
+        return APP;
+        
+    }
+      
 }
 

@@ -18,10 +18,11 @@ public class Ejercicio1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        double[] coef={-9,0,2.6,-12,0,32,1};
+        //double[] coef={-9,0,2.6,-12,0,32,1};
+        double[] coef={-2,-5,7,-4,1};
         Polinomio p = new Polinomio(coef);
-        double x=2;
-        int n=7;
+        double x=3;
+        int n=5;
         double[] D = p.evalDerivadas(x, n);
         for (int i = 0; i <= n; i++) {
             System.out.println("derivada "+i+"ésima\t D[" + i + "]=" + D[i]);

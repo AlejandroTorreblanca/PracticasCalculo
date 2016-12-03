@@ -13,20 +13,22 @@ import ORG.netlib.math.complex.Complex;
  */
 public class PolinomioInterpolador extends Polinomio{
 
-    double[] coefFormaNewton;
-    double[] nodos;
+    public double[] coefFormaNewton;
+    public double[] nodos;
+    private double[] auxiliar;
 
     public PolinomioInterpolador(double[][] xy) {
         this.nodos=new double[xy.length];
         this.coefFormaNewton = coefyNodosH(xy);
         coeficientesPol();
-
+        auxiliar =new double[xy.length];
     }
 
     public PolinomioInterpolador() {
         coefFormaNewton=new double[1];
         nodos=new double[1];
         coef =new Complex[1];
+        auxiliar =new double[1];
     }
 
      double[] coefyNodosL(double[][] xy){
@@ -73,18 +75,11 @@ public class PolinomioInterpolador extends Polinomio{
                       }else{  // si no se repiten los nodos
                           p[j]=(p[j]-p[j-1]) / (nodos[j] - nodos[j-k]);
                       }
-
                   }
-
               }
-
           }
         return p;
-
     }
-
-
-
 
     @Override
     public double eval(double x){
@@ -96,7 +91,6 @@ public class PolinomioInterpolador extends Polinomio{
         return suma;
     }
 
-
     void coeficientesPol(){
         int m=coefFormaNewton.length;
         coef = new Complex[m];
@@ -107,12 +101,33 @@ public class PolinomioInterpolador extends Polinomio{
             Complex auxiliar=new Complex(coefFormaNewton[i]);
             for (int k = m-1-i; k >=1; k--) {
                 coef[k]=coef[k-1].sub(coef[k].scale(nodos[i]));
-
             }
             coef[0]=auxiliar.sub(coef[0].scale(nodos[i]));
         }
-
     }
 
+    
+    public double[] evalDerivadas(double x, int n){
+         
+        int m = grado();
+        double[] D= new double[n+1];
+        double[][] g= new double[n+1][m+1];
+        g[0][m] =coefFormaNewton[m] ;
+        for (int i = m-1; i >= 0; i--) {
+            g[0][i] =coefFormaNewton[i]+ g[0][i+1]*(x-nodos[i]);
+            
+             for (int j = 1; j <= n; j++) {
+                g[j][i] = g[j][i+1]*(x-nodos[i])+j*g[j-1][i+1]; 
+            }
+        }
+        /*for (int j = 1; j <= n; j++){
+            g[j][0] = g[j][0+1]*(x-nodos[j-1])+j*g[j-1][0+1]; 
+        }*/
+           for (int i = 0; i<=n; i++) 
+                D[i]=g[i][0];
+            
+        
+        return D;
+    }
 }
 
