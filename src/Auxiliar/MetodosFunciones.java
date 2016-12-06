@@ -4,7 +4,7 @@
  */
 
 package auxiliar;
-
+import java.util.Stack;
 /**
  *
  * @author antoniopallaresruiz
@@ -314,9 +314,9 @@ public static class compuesta implements Funcion{
         double fA=f.eval(a);
         double fB=f.eval(b);
         double h=(b-a);
-        double m= a +h/2;
+        double m= a+h/2;
         double fM=f.eval(m);
-        double integral= (fA+ 4*fM+fB)*h/6;
+        double integral= (fA+4*fM+fB)*h/6;
         h=h/2;
         double fM1=f.eval(a+h/2);
         double integral0=(fA+ 4*fM1+fM)*h/6;
@@ -324,28 +324,35 @@ public static class compuesta implements Funcion{
         double integral1=(fM+ 4*fM2+fB)*h/6;
         if(Math.abs(integral - integral0 - integral1)> precision){
             nProfundidad= nProfundidad-1;
+            //System.out.println("divido intervalo("+a+","+b+") "+Math.abs(integral - integral0 - integral1)+">"+ precision);
             return integralAdaptada(f, a, m, precision/2, nProfundidad )+
                     integralAdaptada(f, m, b, precision/2, nProfundidad ); 
         }
+        //System.out.println(Math.abs(integral - integral0 - integral1)+">"+ precision);
         return integral0+integral1;
     } 
+
+      public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol,int N)
+      {
+          return IntegralAdaptativaIt(f, a, b, Tol, N, null);
+      }
       
-    public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol,int Na)
+      public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol,int N, double[][] tabla)
     {
         double APP=0;
-        int N=1000;
-        int i=1;
-        double[] TOL=new double[N];
-        double[] A=new double[N];
-        double[] h=new double[N];
-        double[] FA=new double[N];
-        double[] FB=new double[N];
-        double[] FC=new double[N];
-        double[] S=new double[N];
-        double[] L=new double[N];
+        int i=1,k=0;
+        double[] TOL=new double[N+10];
+        double[] A=new double[N+10];
+        double[] h=new double[N+10];
+        double[] FA=new double[N+10];
+        double[] FB=new double[N+10];
+        double[] FC=new double[N+10];
+        double[] S=new double[N+10];
+        double[] L=new double[N+10];
         double[] V=new double[10];
         double FD,FE,S1,S2;
         
+        TOL[i]=10*Tol;
         A[i]=a;
         h[i]=(b-a)/2;
         FA[i]=f.eval(a);
@@ -354,10 +361,23 @@ public static class compuesta implements Funcion{
         S[i]=h[i]*(FA[i]+4*FC[i]+FB[i])/3;
         L[i]=1;
         
+        if(tabla!=null)
+        {
+            tabla[k][0]=a;
+            tabla[k][1]=FA[i];
+            k++;
+            tabla[k][0]=b;
+            tabla[k][1]=FB[i];
+            k++;
+            tabla[k][0]=a+h[i];
+            tabla[k][1]=FC[i];
+            k++;
+        }
+        
         while(i>0)
         {
-            FD=f.eval((A[i]+h[i])/2);
-            FE=f.eval((A[i]+3*h[i])/2);
+            FD=f.eval(A[i]+h[i]/2);
+            FE=f.eval(A[i]+3*h[i]/2);
             S1=h[i]*(FA[i]+4*FD+FC[i])/6;
             S2=h[i]*(FC[i]+4*FE+FB[i])/6;
             V[1]=A[i];
@@ -369,13 +389,28 @@ public static class compuesta implements Funcion{
             V[7]=S[i];
             V[8]=L[i];
             
+        if(tabla!=null)
+        {
+            tabla[k][0]=A[i]+h[i]/2;
+            tabla[k][1]=FD;
+            k++;
+            tabla[k][0]=A[i]+3*h[i]/2;
+            tabla[k][1]=FE;
+            k++;
+        }
+            
             i-=1;             
             
-            if(Math.abs(S1+S2-V[7])<V[6])
-              APP=APP+(S1+S2);  
+            if(Math.abs((S1+S2)-V[7])<V[6])
+            {
+              APP=APP+(S1+S2);
+              //System.out.println(Math.abs(S1+S2-V[7])+" >= "+ V[6]);
+            }
+            
             else
             {
-              if(V[8]>=Na)
+              //System.out.println("Divido intervalo ("+V[1]+","+(V[1]+V[5])+") "+Math.abs(S1+S2-V[7])+" > "+ V[6]);
+              if(V[8]>=N)
               {
                   System.err.println("LEVEL EXCEDED");
                   System.exit(1);
@@ -408,5 +443,84 @@ public static class compuesta implements Funcion{
         
     }
       
+     public static class Intervalo{
+    
+         double A;
+         double B;
+         double m;
+         double tol;
+         double S;
+         
+        public Intervalo(double A,double B,double m,double tol, double S)
+        {
+            this.A=A;
+            this.B=B;
+            this.m=m;
+            this.tol=tol;
+            this.S=S;
+            
+        }
+    }  
+    
+    public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol)
+    {
+        double APP=0;
+        double FA,FB,FC,FD,FE,S1,S2,S3;
+        Stack<Intervalo> pila = new Stack<>();
+        double m=(b-a)/2;
+        FA=f.eval(a);
+        FB=f.eval(b);
+        FC=f.eval(a+m);
+        FD=f.eval(a+m/2);
+        FE=f.eval(a+3*m/2);
+        S1=m*(FA+4*FC+FB)/3;
+        S2=m*(FA+4*FD+FC)/6;
+        S3=m*(FC+4*FE+FB)/6;
+        
+        if(Math.abs(S2+S3-S1)<Tol)
+        {
+            APP=APP+(S1+S2);
+            System.out.println("directo ("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
+        }
+        else
+        {
+            System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
+            Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
+            Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
+            pila.push(I2);
+            pila.push(I1);
+        }
+        
+        while (!pila.empty()) {
+            Intervalo I=pila.pop();
+            a=I.A;
+            b=I.B;
+            m=I.m;
+            S1=I.S;
+            Tol=I.tol;
+            FA=f.eval(a);
+            FB=f.eval(b);
+            FC=f.eval(a+m);
+            FD=f.eval(a+m/2);
+            FE=f.eval(a+3*m/2);
+            S2=m*(FA+4*FD+FC)/6;
+            S3=m*(FC+4*FE+FB)/6;
+
+            if(Math.abs(S2+S3-S1)<Tol)
+            {
+                System.out.println("quitamos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
+                APP=APP+(S1+S2);
+            }
+            else
+            {
+                System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
+                Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
+                Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
+                pila.push(I2);
+                pila.push(I1);
+            }
+        }
+        return APP;
+    }
 }
 
