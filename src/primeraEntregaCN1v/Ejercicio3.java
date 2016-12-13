@@ -44,22 +44,20 @@ public class Ejercicio3 {
         H h=new H();
        
     //Apartado 1
-        double resultado=MetodosFunciones.IntegralAdaptativaIt(g, 10, 30, 0.0001, 1000);
-        //double resultado2=MetodosFunciones.IntegralAdaptativaIt(g, 10, 30, 0.0001);
+        double resultado2=MetodosFunciones.IntegralAdaptativaItPila(g, 10, 30, 0.0001);
         double res=MetodosFunciones.integralAdaptada(g, 10, 30, 0.0001, 1000);
         
         System.out.println("Apartado 1:");
-        System.out.println("resultado= "+ resultado);
-        //System.out.println("resultado2= "+ resultado2);
-        System.out.println("resultado3= "+ res);
+        System.out.println("resultado con pila= "+ resultado2);
+        System.out.println("resultado correcto= "+ res);
         System.out.println("");
         
     //Apartado 2
         double[] tabla =new double[10];
         for (int i = 1; i <= 10; i++) {
-            tabla[i-1]=MetodosFunciones.IntegralAdaptativaIt(h,0,i*0.1, 0.00001, 1000);
+            tabla[i-1]=MetodosFunciones.IntegralAdaptativaItPila(h,0,i*0.1, 0.00001);
         }
-        System.out.println("Apartado 1:");
+        System.out.println("segunda:");
         for (int i = 0; i < 10; i++) {
             System.out.println("Tabla["+i+"]= "+ tabla[i]);
         }
@@ -67,9 +65,9 @@ public class Ejercicio3 {
 
                 
     //Apartado 3
-        double[][] valores=new double[1000][1000];
-        resultado=MetodosFunciones.IntegralAdaptativaIt(f,1,3, 0.0001, 1000,valores);
         
+        double[] resultadoIntegral=new double[2];
+        double[][] valores=MetodosFunciones.IntegralAdaptativaItPila(f,1,3, 0.0001,resultadoIntegral);
         int numPuntos=20;
         double[][] xys=MetodosFunciones.tablaGraficaTchev(f, numPuntos, 1,3);
         PolinomioInterpolador p = new PolinomioInterpolador(xys);
@@ -87,7 +85,7 @@ public class Ejercicio3 {
         double yinf=-1;
         double ysup=4;
         pd.addEjesCoordenados(true,yinf,ysup,xinf, xsup,0,0);
-        pd.addListaPuntos(Color.blue,valores, 3);
+        pd.addListaPuntos(Color.red,valores, 3);
         pd.addCurva(Color.blue, p, 100, 1, 3);
         pd.repaint();
     }

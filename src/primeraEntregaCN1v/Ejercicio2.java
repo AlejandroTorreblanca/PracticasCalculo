@@ -28,7 +28,7 @@ public class Ejercicio2 {
     public static void main(String[] args) {
 
         FRunge f=new FRunge();
-        int N=11;
+        int N=20;
         double a=-1;
         double b=1;
         double x=0;
@@ -69,7 +69,7 @@ public class Ejercicio2 {
         });
         pd1.addEjesCoordenados(true, a-0.5, b+0.5,-1, 2,0,0);
         pd1.addListaPuntos(Color.blue, equiTabla, 3);
-        pd1.addCurva(Color.red, p, 111, a, b);
+        pd1.addCurva(Color.red, p, 201, a, b);
         pd1.repaint();
     }
     

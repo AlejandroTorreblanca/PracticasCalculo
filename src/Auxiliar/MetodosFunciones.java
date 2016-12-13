@@ -4,6 +4,7 @@
  */
 
 package auxiliar;
+import java.util.LinkedList;
 import java.util.Stack;
 /**
  *
@@ -385,22 +386,22 @@ public static class compuesta implements Funcion{
             V[6]=TOL[i];
             V[7]=S[i];
             V[8]=L[i];
-            
         if(tabla!=null)
         {
             tabla[k][0]=A[i];
             tabla[k][1]=FA[i];
+            System.out.println("("+A[i]+","+FA[i]+")");
             k++;
         }
             i-=1;             
             if(Math.abs((S1+S2)-V[7])<V[6])
             {
               APP=APP+(S1+S2);
-              //System.out.println(Math.abs(S1+S2-V[7])+" >= "+ V[6]);
+              //System.out.println("APP: "+APP+"("+V[1]+","+(V[1]+V[5])+")"+S1+":"+S2);
             }
             else
             {
-              //System.out.println("Divido intervalo ("+V[1]+","+(V[1]+V[5])+") "+Math.abs(S1+S2-V[7])+" > "+ V[6]);
+              //System.out.println("Divido intervalo ("+V[1]+","+(V[1]+V[5])+")");
               if(V[8]>=N)
               {
                   System.err.println("LEVEL EXCEDED");
@@ -430,18 +431,17 @@ public static class compuesta implements Funcion{
               }
             }
         }
+        System.out.println("k="+k);
         return APP;
         
     }
       
-     public static class Intervalo{
-    
+    public static class Intervalo{
          double A;
          double B;
          double m;
          double tol;
          double S;
-         
         public Intervalo(double A,double B,double m,double tol, double S)
         {
             this.A=A;
@@ -449,15 +449,32 @@ public static class compuesta implements Funcion{
             this.m=m;
             this.tol=tol;
             this.S=S;
-            
         }
-    }  
+    }
     
-    public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol)
+    public static class Par{
+        double x;
+        double y;
+        public Par (double x, double y){
+            this.x=x;
+            this.y=y;
+        }
+    }
+    
+    public static double IntegralAdaptativaItPila(Funcion f, double a,double b, double Tol)
     {
+        double[] resultado=new double[2];
+        double[][] tabla=IntegralAdaptativaItPila(f, a, b, Tol, resultado);        
+        return resultado[0];
+    }
+    
+    public static double[][] IntegralAdaptativaItPila(Funcion f, double a,double b, double Tol, double[] resultado)
+    {
+        int g=0;
         double APP=0;
-        double FA,FB,FC,FD,FE,S1,S2,S3;
+        double FA,FB,FC,FD,FE,S1,S2,S3,a_aux;
         Stack<Intervalo> pila = new Stack<>();
+        LinkedList<Par> lista=new LinkedList<>();
         double m=(b-a)/2;
         FA=f.eval(a);
         FB=f.eval(b);
@@ -467,19 +484,25 @@ public static class compuesta implements Funcion{
         S1=m*(FA+4*FC+FB)/3;
         S2=m*(FA+4*FD+FC)/6;
         S3=m*(FC+4*FE+FB)/6;
+        a_aux=a;
         
         if(Math.abs(S2+S3-S1)<Tol)
         {
-            APP=APP+(S1+S2);
-            //System.out.println("directo ("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
+            APP=APP+(S3+S2);
+            //System.out.println("APP pila: "+APP+"("+a+","+b+")");
         }
         else
         {
-            //System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
+            //System.out.println("Metemos intervalo PILA,("+a+","+b+")");
             Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
             Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
             pila.push(I2);
             pila.push(I1);
+            Par p1=new Par(a, FA);
+            Par p2=new Par(b, FB);
+            lista.add(p1);
+            lista.add(p2);
+            g=2;
         }
         
         while (!pila.empty()) {
@@ -496,22 +519,39 @@ public static class compuesta implements Funcion{
             FE=f.eval(a+3*m/2);
             S2=m*(FA+4*FD+FC)/6;
             S3=m*(FC+4*FE+FB)/6;
-
             if(Math.abs(S2+S3-S1)<Tol)
             {
-               //System.out.println("quitamos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
-                APP=APP+(S1+S2);
+                APP=APP+(S3+S2);
+                //System.out.println("APP pila: "+APP+"("+a+","+b+")"+S1+":"+S2);
             }
             else
             {
-                //System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
+                //System.out.println("Metemos intervalo PILA,("+a+","+b+")");
                 Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
                 Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
                 pila.push(I2);
                 pila.push(I1);
+                if(a!=a_aux)
+                {
+                    Par p1=new Par(a, FA);
+                    lista.add(p1);
+                    a_aux=a;
+                    g++;
+                }
             }
         }
-        return APP;
+        int j=lista.size();
+        //System.out.println("lista.size "+ j+"-"+g);
+        double[][] tabla=new double[lista.size()][2];
+        for (int i = 0; i < j; i++) {
+            Par p=lista.pop();
+            tabla[i][0]=p.x;
+            tabla[i][1]=p.y;
+            //System.out.println("("+p.x+","+p.y+")");
+            
+        }
+        resultado[0]=APP;
+        return tabla;
     }
 }
 

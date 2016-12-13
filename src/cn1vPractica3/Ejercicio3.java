@@ -26,6 +26,7 @@ public class Ejercicio3 {
 time_start = System.currentTimeMillis();
 
         double[][] xys={{1.5,0},{2.7,1},{3.1,-0.5},{-2.1,1},{-6.6,0.5},{11,0}};
+        System.out.println(xys[1][0]+"-"+xys[1][1]);
         Polinomio interpolador =Polinomio.interpoladorLagrange(xys);
         PanelDibujo pd=new PanelDibujo("Ejercicio 3 práctica 3");
          /*
@@ -46,7 +47,7 @@ time_start = System.currentTimeMillis();
         double a=-7;
         double b=12;
         pd.addEjesCoordenados(true,a, b, -10,10);
-     pd.addListaPuntos(Color.blue, xys, 5);
+        pd.addListaPuntos(Color.blue, xys, 5);
         pd.addCurva(Color.red, interpolador, 37, a, b);
         pd.repaint();
         time_end = System.currentTimeMillis();
