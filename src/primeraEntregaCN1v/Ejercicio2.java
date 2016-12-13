@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package primeraEntregaCN1v;
-import ORG.netlib.math.complex.Complex;
 import auxiliar.*;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
@@ -28,30 +27,21 @@ public class Ejercicio2 {
     public static void main(String[] args) {
 
         FRunge f=new FRunge();
-        int N=20;
+        int N=50;
         double a=-1;
         double b=1;
         double x=0;
         int n=3;
         double[][] equiTabla=MetodosFunciones.tablaGraficaTchev(f, N, a,b );
         PolinomioInterpolador p= new PolinomioInterpolador(equiTabla);
-        /*double[][] xys={{5,1},{-7,-23},{-6,-54},{0,-954}};
-        PolinomioInterpolador p = new PolinomioInterpolador(xys);
-        double[] coef,coef2;
-        coef = p.coefFormaNewton;
-        coef2=p.nodos;
-        for (int i = 0; i < coef.length; i++) {
-            System.out.println("coef"+i+":"+coef[i]);
-            System.out.println("nodo"+i+":"+coef2[i]);
-        }*/
+        
         double[] D=p.evalDerivadas(x, n);
         for (int i = 0; i < D.length; i++) {
             System.out.println("derivada "+i+" : "+D[i]);
             
         }
-        System.out.println("p(x) = "+ p);
 
-        PanelDibujo pd1 = new PanelDibujo("Ejercicio 3 práctica 4 interpolacion Chebychev"
+        PanelDibujo pd1 = new PanelDibujo("Ejercicio 2, Funcion Runge"
                 + "",700,0,1500,600);
         /*
          * Una buena estrategia para evitar dejar progamas en ejecucion es crear

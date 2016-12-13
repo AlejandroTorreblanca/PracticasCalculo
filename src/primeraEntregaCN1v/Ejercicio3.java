@@ -44,12 +44,10 @@ public class Ejercicio3 {
         H h=new H();
        
     //Apartado 1
-        double resultado2=MetodosFunciones.IntegralAdaptativaItPila(g, 10, 30, 0.0001);
-        double res=MetodosFunciones.integralAdaptada(g, 10, 30, 0.0001, 1000);
+        double resultado=MetodosFunciones.IntegralAdaptativaItPila(g, 10, 30, 0.0001);
         
         System.out.println("Apartado 1:");
-        System.out.println("resultado con pila= "+ resultado2);
-        System.out.println("resultado correcto= "+ res);
+        System.out.println("Resultado = "+ resultado);
         System.out.println("");
         
     //Apartado 2
@@ -57,7 +55,7 @@ public class Ejercicio3 {
         for (int i = 1; i <= 10; i++) {
             tabla[i-1]=MetodosFunciones.IntegralAdaptativaItPila(h,0,i*0.1, 0.00001);
         }
-        System.out.println("segunda:");
+        System.out.println("Apartado 2:");
         for (int i = 0; i < 10; i++) {
             System.out.println("Tabla["+i+"]= "+ tabla[i]);
         }
