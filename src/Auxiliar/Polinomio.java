@@ -507,4 +507,202 @@ return factores;
         }
         return D;
     }
+    
+    public Polinomio deflacion(Complex z){
+        Polinomio pdefl;
+        int n=coef.length-1;
+        Complex [] defl=new Complex[n];
+        defl[n-1]=coef[n];
+        for(int k=n-2;k>=0;k--){
+            defl[k]=z.mul(defl[k+1]).add(coef[k+1]);
+        }
+        pdefl=new Polinomio(defl);
+        return pdefl;
+    }
+    
+    public Polinomio deflacion(double x){
+        Complex z=new Complex(x);
+        return deflacion(z);
+    }
+    
+    public static Polinomio Construido(Complex an, Complex[] raices){
+        Polinomio pol=new Polinomio(an);
+        Polinomio[] monom=new Polinomio[raices.length];
+        Complex[] cm = new Complex[2];
+        cm[1]=new Complex(1.);
+        for (int k=0;k<raices.length;k++){
+            cm[0]=raices[k].neg();
+            monom[k]=new Polinomio(cm);    
+        }
+        for(int k=0;k<raices.length;k++){
+            pol=pol.producto(monom[k]);
+        }
+        return pol;
+    }
+    
+    public static Polinomio Construido(double an,double[] raices){
+        Polinomio pol;
+        Complex[] raicesc=new Complex[raices.length];
+        Complex anc=new Complex(an);
+        for(int k=0;k<raices.length;k++){
+            raicesc[k]=new Complex(raices[k]);
+        }
+        pol=Construido(anc,raicesc);
+        return pol;
+    }
+    
+       /**
+     * implementacion del metodo de Newton para aproximar raices 
+     * del polinomio al que se le aplica
+     * @param z0  aproximacion inicial
+     * @param e   precision admisible para condiciones de parada
+     * @param nmax numero maximo de iteraciones
+     * @return  devuelve la aproximacion de una raiz del polinomio o un
+     * error para su captura
+     * @throws auxiliar.Polinomio.ErrorPolinomios 
+     */
+    public Complex newton(Complex z0, double e, int nmax) throws ErrorPolinomios {
+        Complex xi = new Complex(z0);
+        int n = grado();
+        for (int j = 0; j < nmax; j++) {
+            Complex b = new Complex(coef[n]);
+            Complex c = new Complex(b);
+            for (int k = n - 1; k >= 1; k--) {
+                b = b.mul(xi).add(coef[k]);
+                c = c.mul(xi).add(b);
+            }
+            b = b.mul(xi).add(coef[0]);
+            if (c.abs() < e) {
+                System.out.println("Error newton: derivada (casi) nula");
+                throw new ErrorPolinomios();
+            }
+            Complex h = b.scale(-1).div(c);
+            double paso = h.abs();
+	     xi = xi.add(h);
+            if (b.abs() < e || paso < e) {
+                System.out.println("Raiz en z = " + xi + " con error menor que " +
+                        (n * paso) + " en " + j + " iteraciones");
+                return xi;
+            }
+        }
+        System.out.println("Error newton polinomio: no hay convergencia en " +
+                nmax + " iteraciones ");
+        throw new ErrorPolinomios();
+    }
+
+    
+    public double newton(double x,double prec,int nmaxit) throws ErrorPolinomios {
+        Complex z=new Complex(x);
+        z=newton(z,prec,nmaxit);
+        return z.re();
+    }
+    
+    
+           /**
+     * Método que devuelve una lista de las raíces del polinomio sobre el que se
+     * aplica utilizando el método de aproximación de newton en un punto inicial
+     * aleatorio, con un número máximo de intentos.
+     * @param precision precisión con la que se quiere acercar  cada raíz.
+     * @param nmax número máximo de iteraciones permitido al método de Newton.
+     * @param nintentos número máximo de intentos para encontrar las raíces.
+     * @return Complex[] Lista de las raíces.
+     * @throws auxiliar.Polinomio.ErrorPolinomios 
+     */
+    public Complex[] buscaRaicesAleatorio(double precision, int nmax, int nintentos)
+            throws ErrorPolinomios{
+        Polinomio pd=new Polinomio(this);//Para aplicarle las deflaciones.
+        int intentos=0;
+        Complex[] raices=new Complex[this.grado()];
+        double radio=this.radioRaices();
+        double precG=Math.pow(precision, 1./3);
+        for(int i=0;i<raices.length;i++){
+            intentos++;
+            try{
+                Complex ptoInicial=Complex.polar(radio*Math.random(),2*Math.PI*Math.random());
+                raices[i]=pd.newton(ptoInicial, precG, nmax);
+                raices[i]=this.newton(raices[i], precision, nmax);
+                pd=pd.deflacion(raices[i]);
+            }catch(ErrorPolinomios error){
+                i=i-1;
+            }
+            if(intentos>nintentos){
+                System.out.println("Sobrepasa el número de intentos.");
+                throw new ErrorPolinomios();
+            }          
+        }
+        System.out.println("Las "+ this.grado() + " raíces han sido encontradas en " +
+                intentos + " intentos.");
+        return raices;
+    }
+        /**
+     * Método que devuelve una lista de las raíces del polinomio CON COEFICIENTES REALES
+     * sobre el que se
+     * aplica utilizando el método de aproximación de newton en un punto inicial
+     * aleatorio, con un número máximo de intentos.
+     * Si encuentra una raíz que no es real toma también la conjugada
+     * @param precision precisión con la que se quiere acercar  cada raíz.
+     * @param nmax número máximo de iteraciones permitido al método de Newton.
+     * @param nintentos número máximo de intentos para encontrar las raíces.
+     * @return Complex[] Lista de las raíces.
+     * @throws auxiliar.Polinomio.ErrorPolinomios 
+     */
+    public Complex[] buscaRaicesAleatorioPCR(double precision, int nmax, int nintentos)
+            throws ErrorPolinomios{
+        Polinomio pd=new Polinomio(this);//Para aplicarle las deflaciones.
+        int intentos=0;
+        Complex[] raices=new Complex[this.grado()];
+        double radio=this.radioRaices();
+        double precG=Math.pow(precision, 1./3);
+        for(int i=0;i<raices.length;i++){
+            intentos++;
+            try{
+                Complex ptoInicial=Complex.polar(radio*Math.random(),2*Math.PI*Math.random());
+                raices[i]=pd.newton(ptoInicial, precG, nmax);
+                raices[i]=this.newton(raices[i], precision, nmax);
+                pd=pd.deflacion(raices[i]);
+                if(Math.abs(raices[i].im())>precision){
+                    i++;
+                    raices[i]=raices[i-1].conj();
+                    pd=pd.deflacion(raices[i]);
+                }
+            }catch(ErrorPolinomios error){
+                i=i-1;
+            }
+            if(intentos>nintentos){
+                System.out.println("Sobrepasa el número de intentos.");
+                throw new ErrorPolinomios();
+            }          
+        }
+        System.out.println("Las "+ this.grado() + " raíces han sido encontradas en " +
+                intentos + " intentos.");
+        return raices;
+    }
+    
+    public double radioRaices()
+    {
+        double radio=1;
+        int n=grado();
+        double max=coef[n].abs();
+        for (int i = n-1; i >=0; i--) {
+            if(coef[i].abs()>max)
+                max=coef[i].abs();
+        }
+        return radio+max/coef[n].abs();
+    }
+    
+    public static Polinomio[] legendre(int n)
+    {
+        Polinomio[] L= new Polinomio[n+1];
+        L[0]=new Polinomio(1);
+        if(n==0)
+            return L;
+        double[] ls ={0,1};
+        L[1]=new Polinomio(ls);
+        if(n==1)
+            return L;
+        for (int i = 1; i <= n-1; i++) {
+            L[i+1]=L[i].producto(2*i+1).resta(L[i-1].producto(i).producto(1./(i+1)));
+        }
+        return L;
+    }
 }

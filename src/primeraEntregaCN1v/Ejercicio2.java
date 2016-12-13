@@ -32,7 +32,7 @@ public class Ejercicio2 {
         double a=-1;
         double b=1;
         double x=0;
-        int n=4;
+        int n=3;
         double[][] equiTabla=MetodosFunciones.tablaGraficaTchev(f, N, a,b );
         PolinomioInterpolador p= new PolinomioInterpolador(equiTabla);
         /*double[][] xys={{5,1},{-7,-23},{-6,-54},{0,-954}};

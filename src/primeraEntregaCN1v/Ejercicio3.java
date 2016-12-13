@@ -42,27 +42,22 @@ public class Ejercicio3 {
         F f=new F();
         G g=new G();
         H h=new H();
-        
-        //double aux=MetodosFunciones.IntegralAdaptativaIt(g, 10, 30, 0.01, 4);
-      
-       //double aux=MetodosFunciones.integralAdaptada(f, 1, 3, 0.0001, 1000);
-       //double aux=MetodosFunciones.IntegralAdaptativaIt(f, 1, 3, 0.0001, 1000);
-      //double aux=MetodosFunciones.IntegralAdaptativaIt(f, 1, 3, 0.000001);
        
-       
-       // System.out.println("resultado= "+ aux1);
-       
-       //Apartado 1
+    //Apartado 1
         double resultado=MetodosFunciones.IntegralAdaptativaIt(g, 10, 30, 0.0001, 1000);
+        //double resultado2=MetodosFunciones.IntegralAdaptativaIt(g, 10, 30, 0.0001);
+        double res=MetodosFunciones.integralAdaptada(g, 10, 30, 0.0001, 1000);
         
         System.out.println("Apartado 1:");
         System.out.println("resultado= "+ resultado);
+        //System.out.println("resultado2= "+ resultado2);
+        System.out.println("resultado3= "+ res);
         System.out.println("");
         
-        //Apartado 2
+    //Apartado 2
         double[] tabla =new double[10];
-        for (int i = 0; i < 10; i++) {
-            tabla[i]=MetodosFunciones.IntegralAdaptativaIt(h,0,i*0.1, 0.00001, 1000);
+        for (int i = 1; i <= 10; i++) {
+            tabla[i-1]=MetodosFunciones.IntegralAdaptativaIt(h,0,i*0.1, 0.00001, 1000);
         }
         System.out.println("Apartado 1:");
         for (int i = 0; i < 10; i++) {
@@ -71,14 +66,14 @@ public class Ejercicio3 {
         System.out.println("");
 
                 
-        //Apartado 3
+    //Apartado 3
         double[][] valores=new double[1000][1000];
         resultado=MetodosFunciones.IntegralAdaptativaIt(f,1,3, 0.0001, 1000,valores);
         
         int numPuntos=20;
         double[][] xys=MetodosFunciones.tablaGraficaTchev(f, numPuntos, 1,3);
         PolinomioInterpolador p = new PolinomioInterpolador(xys);
-        PanelDibujo pd = new PanelDibujo("Ejercicio 3, apartado 3, entrega");
+        PanelDibujo pd = new PanelDibujo("Ejercicio 3, Apartado 3");
         pd.addWindowListener(
                 new WindowAdapter() {
 

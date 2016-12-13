@@ -369,9 +369,6 @@ public static class compuesta implements Funcion{
             tabla[k][0]=b;
             tabla[k][1]=FB[i];
             k++;
-            tabla[k][0]=a+h[i];
-            tabla[k][1]=FC[i];
-            k++;
         }
         
         while(i>0)
@@ -391,22 +388,16 @@ public static class compuesta implements Funcion{
             
         if(tabla!=null)
         {
-            tabla[k][0]=A[i]+h[i]/2;
-            tabla[k][1]=FD;
-            k++;
-            tabla[k][0]=A[i]+3*h[i]/2;
-            tabla[k][1]=FE;
+            tabla[k][0]=A[i];
+            tabla[k][1]=FA[i];
             k++;
         }
-            
             i-=1;             
-            
             if(Math.abs((S1+S2)-V[7])<V[6])
             {
               APP=APP+(S1+S2);
               //System.out.println(Math.abs(S1+S2-V[7])+" >= "+ V[6]);
             }
-            
             else
             {
               //System.out.println("Divido intervalo ("+V[1]+","+(V[1]+V[5])+") "+Math.abs(S1+S2-V[7])+" > "+ V[6]);
@@ -480,11 +471,11 @@ public static class compuesta implements Funcion{
         if(Math.abs(S2+S3-S1)<Tol)
         {
             APP=APP+(S1+S2);
-            System.out.println("directo ("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
+            //System.out.println("directo ("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
         }
         else
         {
-            System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
+            //System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
             Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
             Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
             pila.push(I2);
@@ -508,12 +499,12 @@ public static class compuesta implements Funcion{
 
             if(Math.abs(S2+S3-S1)<Tol)
             {
-                System.out.println("quitamos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
+               //System.out.println("quitamos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+"<"+Tol);
                 APP=APP+(S1+S2);
             }
             else
             {
-                System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
+                //System.out.println("Metemos intervalo,("+a+","+b+") "+Math.abs(S2+S3-S1)+">"+Tol);
                 Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
                 Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
                 pila.push(I2);
