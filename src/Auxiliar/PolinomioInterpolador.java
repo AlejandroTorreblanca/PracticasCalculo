@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package auxiliar;
 
@@ -9,7 +5,7 @@ import ORG.netlib.math.complex.Complex;
 
 /**
  *
- * @author apall para CN 1v del curso 2012/2013
+ * @author AlejandroTorreblanca
  */
 public class PolinomioInterpolador extends Polinomio{
 
@@ -106,27 +102,35 @@ public class PolinomioInterpolador extends Polinomio{
         }
     }
 
-    
+    /**
+     * Función  que se pide en el ejercicio 2 de la entrega.
+     * Se evalúan simultáneamente las n primeras derivadas de un polinomio 
+     * interpolador (de Lagrange o Hermite) utilizando la forma anidada de Newton en el punto x.
+     * El procedimiento es el siguiente(utilizaremos la notación del enunciado):
+     * Para calcular g0 se itera desde gm, siendo m el grado del polinomio.
+     * Para calcular g'0 se itera en este caso desde g'm-1.
+     * Para calcular g''0 se itera en este caso desde g''m-2.
+     * Asi sucesivamente, ya que los terminos gm, g'm-1, g''m-2... son los coeficientes en la forma de Newton en las 
+     * correspondientes posiciones.
+     * @param x Punto de la recta real en el que se desea evaluar la derivada. 
+     * @param n Número de derivadas que se desean clacular.
+     * @return Lista que contiene las n derivadas del polinomio evaluadas en el punto x.
+     */
+    @Override
     public double[] evalDerivadas(double x, int n){
          
         int m = grado();
         double[] D= new double[n+1];
         double[][] g= new double[n+1][m+1];
         g[0][m] =coefFormaNewton[m] ;
-        for (int i = m-1; i >= 0; i--) {
-            g[0][i] =coefFormaNewton[i]+ g[0][i+1]*(x-nodos[i]);
-            
-             for (int j = 1; j <= n; j++) {
-                g[j][i] = g[j][i+1]*(x-nodos[i])+j*g[j-1][i+1]; 
-            }
+        for (int i = m-1; i >= 0; i--) 
+        {
+            g[0][i] =coefFormaNewton[i]+ g[0][i+1]*(x-nodos[i]); //Calculamos los gm
+            for (int j = 1; j <= n; j++) 
+                g[j][i] = g[j][i+1]*(x-nodos[i])+j*g[j-1][i+1]; //Claculamos los g'm
         }
-        /*for (int j = 1; j <= n; j++){
-            g[j][0] = g[j][0+1]*(x-nodos[j-1])+j*g[j-1][0+1]; 
-        }*/
-           for (int i = 0; i<=n; i++) 
-                D[i]=g[i][0];
-            
-        
+        for (int i = 0; i<=n; i++) 
+            D[i]=g[i][0]; //Extraemos los g0, g'0, g''0... que son los términos buscados.
         return D;
     }
 }

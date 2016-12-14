@@ -484,27 +484,33 @@ return factores;
         return D;
     }
    
+    /**
+    * Función sobrecargada que se pide en el ejercicio 1 de la entrega.
+    * El algoritmo sigue los mismos pasos que cuando evalua la derivada con un número complejo,
+    * la única diferencia es que las operaciones ahora en vez de ser con números complejos son con 
+    * números reales.
+    * @param x Punto de la recta real en el que se desea evaluar la derivada. 
+    * @param n Número de derivadas que se desean clacular.
+    * @return Lista que contiene las n derivadas del polinomio evaluadas en el punto x.
+    */
     public double[] evalDerivadas(double x, int n)
     {
         double[] D= new double[n+1];
         int m=grado();
-        for (int i = 0; i <=Math.min(m, n); i++) {
+        for (int i = 0; i <=Math.min(m, n); i++) 
             D[i]=coef[m].re();
-        }
         int p=Math.min(m, n);
-        for (int c = m-1; c >= 0; c--) {
+        for (int c = m-1; c >= 0; c--) 
+        {
             D[0]=coef[c].re()+(D[0]*x);
             if (c<p) 
                 p--;
-            for (int i = 1; i <= p; i++) {
+            for (int i = 1; i <= p; i++) 
                  D[i]=D[i-1]+(D[i]*x);
-            }
         }
-        for (int i = 1; i <= Math.min(m, n); i++) {
-            for (int j = i; j <= Math.min(m, n); j++) {
+        for (int i = 1; i <= Math.min(m, n); i++) 
+            for (int j = i; j <= Math.min(m, n); j++) 
                 D[j]=D[j]*i;   
-            }
-        }
         return D;
     }
     
@@ -678,30 +684,26 @@ return factores;
         return raices;
     }
     
-    public double radioRaices()
-    {
+    // Ejercicio 3 practica7
+    public double radioRaices(){
         double radio=1;
         int n=grado();
         double max=coef[n].abs();
         for (int i = n-1; i >=0; i--) {
-            if(coef[i].abs()>max)
-                max=coef[i].abs();
-        }
-        return radio+max/coef[n].abs();
+            if(coef[i].abs()>max) max=coef[i].abs();          
+        }      
+        return radio=radio+max/coef[n].abs();
     }
-    
-    public static Polinomio[] legendre(int n)
-    {
-        Polinomio[] L= new Polinomio[n+1];
+    //Ejercicio2 practica 7
+    public static Polinomio[] legengre(int n){
+        Polinomio[] L=new Polinomio[n+1];
         L[0]=new Polinomio(1);
-        if(n==0)
-            return L;
-        double[] ls ={0,1};
+        if(n==0)return L;
+        double[] ls={0,1};
         L[1]=new Polinomio(ls);
-        if(n==1)
-            return L;
-        for (int i = 1; i <= n-1; i++) {
-            L[i+1]=L[i].producto(2*i+1).resta(L[i-1].producto(i).producto(1./(i+1)));
+        if(n==1)return L;
+        for (int i = 1; i <=n-1; i++) {
+            L[i+1]=L[i].producto(L[1]).producto(2*i+1).resta(L[i-1].producto(i)).producto(1./(i+1));
         }
         return L;
     }

@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package auxiliar;
 import java.util.LinkedList;
 import java.util.Stack;
 /**
  *
- * @author antoniopallaresruiz
+ * @author AlejandroTorreblanca
  */
 public class MetodosFunciones {
 
@@ -17,7 +13,6 @@ public class MetodosFunciones {
         for (int i = 0; i < tabla.length; i++) {
             tabla[i][0]=a+i*(b-a)/(numpuntos-1);
             tabla[i][1]=f.eval(tabla[i][0]);
-
         }
         return tabla;
     }
@@ -325,23 +320,30 @@ public static class compuesta implements Funcion{
         double integral1=(fM+ 4*fM2+fB)*h/6;
         if(Math.abs(integral - integral0 - integral1)> precision){
             nProfundidad= nProfundidad-1;
-            //System.out.println("divido intervalo("+a+","+b+") "+Math.abs(integral - integral0 - integral1)+">"+ precision);
             return integralAdaptada(f, a, m, precision/2, nProfundidad )+
                     integralAdaptada(f, m, b, precision/2, nProfundidad ); 
         }
-        //System.out.println(Math.abs(integral - integral0 - integral1)+">"+ precision);
         return integral0+integral1;
     } 
-
-      public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol,int N)
-      {
-          return IntegralAdaptativaIt(f, a, b, Tol, N, null);
-      }
       
-      public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol,int N, double[][] tabla)
+    /**
+     * Método pedido en el ejercicio 3 de la entrega.
+     * La implementación es la misma que la del libro de Burden-Faires, se utilizan arrays definidos 
+     * al principio del programa y de tamaño fijo. Al implementarlos de esta manera tenemos dos problemas, 
+     * o bien no se llenan los arrays por completo, o se limita el tamaño de ellos ya que son finitos.
+     * Debido a esto se ha implementado el algoritmo de otra forma más eficiente al final de esta clase.
+     * Este programa funciona correctamente pero en el programa principal ESTE ALGORITMO NO SE USA, se usará el otro.
+     * @param f
+     * @param a
+     * @param b
+     * @param Tol
+     * @param N
+     * @return 
+     */
+    public static double IntegralAdaptativaIt(Funcion f, double a,double b, double Tol,int N)
     {
         double APP=0;
-        int i=1,k=0;
+        int i=1;
         double[] TOL=new double[N+10];
         double[] A=new double[N+10];
         double[] h=new double[N+10];
@@ -362,16 +364,6 @@ public static class compuesta implements Funcion{
         S[i]=h[i]*(FA[i]+4*FC[i]+FB[i])/3;
         L[i]=1;
         
-        if(tabla!=null)
-        {
-            tabla[k][0]=a;
-            tabla[k][1]=FA[i];
-            k++;
-            tabla[k][0]=b;
-            tabla[k][1]=FB[i];
-            k++;
-        }
-        
         while(i>0)
         {
             FD=f.eval(A[i]+h[i]/2);
@@ -386,62 +378,55 @@ public static class compuesta implements Funcion{
             V[6]=TOL[i];
             V[7]=S[i];
             V[8]=L[i];
-        if(tabla!=null)
-        {
-            tabla[k][0]=A[i];
-            tabla[k][1]=FA[i];
-            System.out.println("("+A[i]+","+FA[i]+")");
-            k++;
-        }
             i-=1;             
             if(Math.abs((S1+S2)-V[7])<V[6])
             {
-              APP=APP+(S1+S2);
-              //System.out.println("APP: "+APP+"("+V[1]+","+(V[1]+V[5])+")"+S1+":"+S2);
+                APP=APP+(S1+S2);
             }
             else
             {
-              //System.out.println("Divido intervalo ("+V[1]+","+(V[1]+V[5])+")");
-              if(V[8]>=N)
-              {
+                if(V[8]>=N)
+                {
                   System.err.println("LEVEL EXCEDED");
                   System.exit(1);
-              }
-              else
-              {
-                  i+=1;
-                  A[i]=V[1]+V[5];
-                  FA[i]=V[3];
-                  FC[i]=FE;
-                  FB[i]=V[4];
-                  h[i]=V[5]/2;
-                  TOL[i]=V[6]/2;
-                  S[i]=S2;
-                  L[i]=V[8]+1;
-                  
-                  i+=1;
-                  A[i]=V[1];
-                  FA[i]=V[2];
-                  FC[i]=FD;
-                  FB[i]=V[3];
-                  h[i]=h[i-1];
-                  TOL[i]=TOL[i-1];
-                  S[i]=S1;
-                  L[i]=L[i-1];
-              }
+                }
+                else
+                {
+                    i+=1;
+                    A[i]=V[1]+V[5];
+                    FA[i]=V[3];
+                    FC[i]=FE;
+                    FB[i]=V[4];
+                    h[i]=V[5]/2;
+                    TOL[i]=V[6]/2;
+                    S[i]=S2;
+                    L[i]=V[8]+1;
+
+                    i+=1;
+                    A[i]=V[1];
+                    FA[i]=V[2];
+                    FC[i]=FD;
+                    FB[i]=V[3];
+                    h[i]=h[i-1];
+                    TOL[i]=TOL[i-1];
+                    S[i]=S1;
+                    L[i]=L[i-1];
+                }
             }
         }
-        System.out.println("k="+k);
         return APP;
-        
     }
-      
+    
+    /**
+     * Esta clase se ha creado para almacenar las propiedades de un intervalo sobre el que estamos 
+     * aplicando el método de la Integral Adaptativa Iterada.
+     */
     public static class Intervalo{
-         double A;
-         double B;
-         double m;
-         double tol;
-         double S;
+         double A;      //Limite izquierdo del intervalo
+         double B;      //Limite derecho del intervalo
+         double m;      //Punto medio del intervalo
+         double tol;    //Tolerancia que se debe aplicar al intervalo
+         double S;      //Aproximación de Simpson del intervalo
         public Intervalo(double A,double B,double m,double tol, double S)
         {
             this.A=A;
@@ -452,29 +437,54 @@ public static class compuesta implements Funcion{
         }
     }
     
+    /**
+     * Esta clase se ha creado para ir almacenando los valores de los puntos que se piden dibujar en el 
+     * aparado 3 del ejercicio 3 de la entrega.
+     */
     public static class Par{
-        double x;
-        double y;
+        double x;   //Punto x
+        double y;   //punto f(x)
         public Par (double x, double y){
             this.x=x;
             this.y=y;
         }
     }
     
-    public static double IntegralAdaptativaItPila(Funcion f, double a,double b, double Tol)
+    /**
+     * Sobrecarga del método IntegralAdaptativaItUsandoPila, si solo se desea obtener el valor de la integral
+     * se usará este metodo. Aunque se calcule la lista de puntos solicitada en el aprtado 3 no la utilizamos,
+     * solo retornamos el valor de la integral.
+     * @param f Función que se desea integrar.
+     * @param a Límite izquierdo del intervalo de integración.
+     * @param b Límite derecho del intervalo de integración.
+     * @param Tol Tolerancia.
+     * @return Resultado de la integral de f en (a,b).
+     */
+    public static double IntegralAdaptativaItUsandoPila(Funcion f, double a,double b, double Tol)
     {
         double[] resultado=new double[2];
-        double[][] tabla=IntegralAdaptativaItPila(f, a, b, Tol, resultado);        
+        double[][] tabla=IntegralAdaptativaItUsandoPila(f, a, b, Tol, resultado);        
         return resultado[0];
     }
     
-    public static double[][] IntegralAdaptativaItPila(Funcion f, double a,double b, double Tol, double[] resultado)
+    /**
+     * Método IntegralAdaptativaIt pero usando una pila para las iteraciones, de está forma usamos la memoria
+     * de forma más eficiente. En este caso como debemos devolver la lista de puntos y además el valor de la integral,
+     * la lista de puntos lo retornamos como de normal y la variable resultado la retornamos mediante el paso por referencia para poder
+     * extraer su valor fuera del método.
+     * @param f Función que se desea integrar.
+     * @param a Límite izquierdo del intervalo de integración.
+     * @param b Límite derecho del intervalo de integración.
+     * @param Tol Tolerancia.
+     * @param resultado Array donde se guardará el resultado de la integral.
+     * @return Lista de puntos (x,f(x)) que se pide dibujar en el apartado 3 del ejercicio 3 de la entrega.
+     */
+    public static double[][] IntegralAdaptativaItUsandoPila(Funcion f, double a,double b, double Tol, double[] resultado)
     {
-        int g=0;
         double APP=0;
         double FA,FB,FC,FD,FE,S1,S2,S3,a_aux;
-        Stack<Intervalo> pila = new Stack<>();
-        LinkedList<Par> lista=new LinkedList<>();
+        Stack<Intervalo> pila = new Stack<>();      //Pila para ir guardando los intervalos que se deesen procesar.
+        LinkedList<Par> lista=new LinkedList<>();   //Lista para guardar los puntos que se introduciran en la lista.
         double m=(b-a)/2;
         FA=f.eval(a);
         FB=f.eval(b);
@@ -489,12 +499,10 @@ public static class compuesta implements Funcion{
         if(Math.abs(S2+S3-S1)<Tol)
         {
             APP=APP+(S3+S2);
-            //System.out.println("APP pila: "+APP+"("+a+","+b+")");
         }
-        else
+        else    //Introducimos los dos primeros intervalos en los que iterar.
         {
-            //System.out.println("Metemos intervalo PILA,("+a+","+b+")");
-            Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
+            Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2); 
             Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
             pila.push(I2);
             pila.push(I1);
@@ -502,10 +510,9 @@ public static class compuesta implements Funcion{
             Par p2=new Par(b, FB);
             lista.add(p1);
             lista.add(p2);
-            g=2;
         }
         
-        while (!pila.empty()) {
+        while (!pila.empty()) {     //Mientras que haya intervalos en la pila seguimos iterando.
             Intervalo I=pila.pop();
             a=I.A;
             b=I.B;
@@ -522,35 +529,29 @@ public static class compuesta implements Funcion{
             if(Math.abs(S2+S3-S1)<Tol)
             {
                 APP=APP+(S3+S2);
-                //System.out.println("APP pila: "+APP+"("+a+","+b+")"+S1+":"+S2);
             }
-            else
+            else    //Hemos sobrepasado la tolerancia asique introducimos otros dos intervalos en la pila.
             {
-                //System.out.println("Metemos intervalo PILA,("+a+","+b+")");
                 Intervalo I1=new Intervalo(a, a+m, m/2, Tol/2, S2);
                 Intervalo I2=new Intervalo(a+m, b, m/2, Tol/2, S3);
                 pila.push(I2);
                 pila.push(I1);
-                if(a!=a_aux)
-                {
+                if(a!=a_aux)    //Solo añadimos el punto "a" si no se había añadido anteriormente.
+                 {
                     Par p1=new Par(a, FA);
                     lista.add(p1);
                     a_aux=a;
-                    g++;
                 }
             }
         }
         int j=lista.size();
-        //System.out.println("lista.size "+ j+"-"+g);
         double[][] tabla=new double[lista.size()][2];
-        for (int i = 0; i < j; i++) {
+        for (int i = 0; i < j; i++) {   //Creamos el array de puntos a retornar a partir de la lista que hemos ido creando.
             Par p=lista.pop();
             tabla[i][0]=p.x;
             tabla[i][1]=p.y;
-            //System.out.println("("+p.x+","+p.y+")");
-            
         }
-        resultado[0]=APP;
+        resultado[0]=APP;   //Almacenamos el valor de la integral
         return tabla;
     }
 }

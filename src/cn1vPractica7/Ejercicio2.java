@@ -21,7 +21,7 @@ public class Ejercicio2 {
         //NO FUNCIONA¡¡¡
        
         int n=3;
-        Polinomio[] L=Polinomio.legendre(n);
+        Polinomio[] L=Polinomio.legengre(n);
         for (int i = 0; i <=n; i++) {
             System.out.println("L["+i+"]="+L[i].escribe());
         }
