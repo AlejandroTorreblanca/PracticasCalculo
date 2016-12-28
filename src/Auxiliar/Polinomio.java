@@ -9,6 +9,7 @@
 package auxiliar;
 
 import ORG.netlib.math.complex.Complex;
+import java.util.ArrayList;
 
 //import java.util.*;   
 /**
@@ -706,5 +707,209 @@ return factores;
             L[i+1]=L[i].producto(L[1]).producto(2*i+1).resta(L[i-1].producto(i)).producto(1./(i+1));
         }
         return L;
+    }
+    
+    /**
+     * Metodo que devuelve una raiz aproximada del polinomio utilizando el
+     * algoritmo de Laguerre, enmpezando en una aproximacion inical  -z- ,
+     * con una determinada -precision- y en
+     * un maximo de -nmax- iteraciones,
+     *
+     * tambien puede devolver un ErrorPolinomios */
+    public Complex laguerre(Complex z, double precision, int nmax)
+            throws ErrorPolinomios {
+
+        Complex xini = new Complex(z);
+        Complex xfin;
+        Complex b;
+        Complex c;
+        Complex d;
+        Complex aux1;
+        Complex aux2;
+        Complex Cmax;
+        int n = coef.length;
+        if (n == 1) {
+            System.out.println("Polinomio constante");
+            throw new ErrorPolinomios();
+        }
+        if (n == 2) {
+            Complex r = coef[0].neg().div(coef[1]);
+            return r;
+        }
+        for (int j = 0; j < nmax; j++) {
+            b = new Complex(coef[n - 1]);
+            c = new Complex(b);
+            d = new Complex(b);
+            for (int k = n - 2; k >= 2; k--) {
+                b = b.mul(xini).add(coef[k]);
+                c = c.mul(xini).add(b);
+                d = d.mul(xini).add(c);
+            }
+            d = d.scale(2);
+            b = b.mul(xini).add(coef[1]);
+            c = c.mul(xini).add(b);
+            b = b.mul(xini).add(coef[0]);
+            if (b.abs() < precision) {
+                System.out.println("Laguerre converge en :" + j + " iteraciones");
+                return xini;
+            } else {
+                aux1 = c.mul(c).scale((n - 1) * (n - 1)).sub(b.mul(d).scale(n * (n - 1)));
+                aux2 = new Complex(aux1);
+                b = Complex.pow(b.scale(n), -1);
+                aux1 = c.add(aux1.sqrt());
+                aux2 = c.sub(aux2.sqrt());
+                aux1 = b.mul(aux1);
+                aux2 = b.mul(aux2);
+                if (aux1.abs() >= aux2.abs()) {
+                    Cmax = new Complex(aux1);
+                } else {
+                    Cmax = new Complex(aux2);
+                }
+            }
+            if (Cmax.abs() == 0) {
+                System.out.println("Error: primera y segunda derivada nulas");
+                throw new ErrorPolinomios();
+            } else {
+                xfin = xini.sub(Complex.pow(Cmax, -1));
+            }
+            if (xfin.sub(xini).abs() < precision) {
+                System.out.println("Laguerre converge en :" + j + " iteraciones");
+                return xini;
+            } else {
+                xini = xfin;
+            }
+        }
+        System.out.println("No hay convergencia en " + precision + " iteraciones.");
+        throw new ErrorPolinomios();
+    }
+    
+        /**
+     * Metodo que devuelve el numero de cambios de signo en la lista de numeros
+     * reales ignorando los ceros
+     *
+     */
+    public static int cambioSigno(double[] lista) {
+
+        int numCambios = 0;
+        int ini = 0;
+        int sig = 0;
+        int m = lista.length;
+        double pini = lista[ini];
+        double psig = 0;
+        for (int i = 0; ini < m && pini == 0; i++) {
+            ini = i + 1;
+            pini = lista[ini];
+            if (ini == m - 1) {
+                return numCambios;
+            }
+        }
+        while (ini < m - 1) {
+            sig = ini + 1;
+            psig = lista[sig];
+            while (sig < m && psig == 0) {
+                sig = sig + 1;
+                psig = lista[sig];
+            }
+
+            if (Math.signum(pini) != Math.signum(psig)) {
+                numCambios = numCambios + 1;
+            }
+            ini = sig;
+            pini = psig;
+        }
+        return numCambios;
+    }
+
+        /** Metodo que devuelve la sucesion de polinomios de Sturm
+     * asociada al polinomio p
+     *
+     * Uso:   p.sucesionSturm()
+     */
+    public Polinomio[] sucesionSturm() {
+        int n = coef.length;
+        Polinomio[] sturm = new Polinomio[n];
+        sturm[0] = new Polinomio(coef);
+        if (n == 1) {
+            return sturm;
+        }
+        sturm[1] = sturm[0].derivada();
+        if (n == 2) {
+            return sturm;
+        }
+        try {
+            for (int k = 2; k < n; k++) {
+                Polinomio auxiliar = sturm[k - 2].div(sturm[k - 1])[0];
+                if (auxiliar.grado() == 0) {
+                    if (auxiliar.coef[0].abs() < precision) {
+                        Polinomio[] sturmN = new Polinomio[k - 1];
+                        for (int i = 0; i < sturmN.length; i++) {
+                            sturmN[i] = sturm[i].div(sturm[k - 1])[1];
+                        }
+                        return sturmN;
+                    }
+                    sturm[k] = new Polinomio(auxiliar).producto(-1);
+                    Polinomio[] sturmN = new Polinomio[k + 1];
+                    for (int i = 0; i < sturmN.length; i++) {
+                        sturmN[i] = new Polinomio(sturm[i]);
+                    }
+                    return sturmN;
+                }
+                sturm[k] = new Polinomio(auxiliar).producto(-1);
+            }
+        } catch (ErrorPolinomios errordivision) {
+
+            System.out.println("AAAA");
+        }
+        return sturm;
+    }
+
+    /** Metodo que devuelve una lista con las ra'ices reales del polinomio
+     * en el intervalo [a,b].
+     *
+     *  Utiliza el m'etodo de la bisecci'on de Sturm que subdivide el intervalo
+     *  [a,b].
+     *
+     */
+    public double[] bisecSturm(double precision, double a, double b) {
+
+        ArrayList sturmraices = new ArrayList();
+        Polinomio[] sucsturm = this.sucesionSturm();
+        this.biseccionSturm(precision, sturmraices, sucsturm, a, b);
+        int m = sturmraices.size();
+        double[] raicesreales = new double[m];
+        for (int i = 0; i < m; i++) {
+            double[] intervalo = (double[]) sturmraices.get(i);
+            System.out.println("a="+intervalo[0]+"  b="+intervalo[1]);
+            raicesreales[i] = intervalo[0] + 0.5 * (intervalo[1] - intervalo[0]);
+        }
+        return raicesreales;
+    }
+
+    /** M'etodo que genera la lista "intervalos" con los subintervalos
+     *    que proporciona el m'etodo de la bisecci'on de Sturm y
+     *    contienen una raiz real con longitud menor que "precision"
+     *
+     */
+    public void biseccionSturm(double precision, ArrayList intervalos,
+            Polinomio[] sturm,
+            double a, double b) {
+        int m = sturm.length;
+        double[] sturmb = new double[m];
+        double[] sturma = new double[m];
+        for (int i = 0; i < m; i++) {
+            sturma[i] = sturm[i].eval(a);
+            sturmb[i] = sturm[i].eval(b);
+        }
+        int n = cambioSigno(sturma) - cambioSigno(sturmb);
+        if (n > 0) {
+            if ((n == 1) && (Math.abs(a - b) < precision)) {
+                double[] intraiz = {a, b};
+                intervalos.add(intraiz);
+            } else {
+                double c = a + 0.5 * (b - a);
+                biseccionSturm(precision, intervalos, sturm, a, c);
+                biseccionSturm(precision, intervalos, sturm, c, b);
+            }
+        }
     }
 }
