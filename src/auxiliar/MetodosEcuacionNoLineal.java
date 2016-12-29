@@ -447,4 +447,37 @@ public class MetodosEcuacionNoLineal {
             super("Error al aproximar raices");
         }
     }
+    
+    public static double interpolacionInversa3puntos(Funcion f, double x0,double x1,double x2, double tolerancia, int nmaxiteraciones)
+    {
+        double[][] xy=new double[3][2];
+        int i=0;
+        xy[0][0]=x0;
+        xy[1][0]=x1;
+        xy[2][0]=x2;
+        xy[0][1]=f.eval(x0);
+        xy[1][1]=f.eval(x1);
+        xy[2][1]=f.eval(x2);
+        if(xy[0][1]<tolerancia)
+            return xy[0][1];
+        if(xy[1][1]<tolerancia)
+            return xy[1][1];
+        if(xy[2][1]<tolerancia)
+            return xy[2][1];
+        
+        while(xy[0][1]<tolerancia)
+        {
+            if(i>nmaxiteraciones)
+            {
+                System.err.println("Superado el número máximo de iteraciones a la hora de calcular el 0 de un polinomio mediante interpolacion inversa.");
+                System.exit(1);
+            }
+            PolinomioInterpolador p=new PolinomioInterpolador(xy);
+            xy[0][3]=xy[0][2];
+            xy[0][2]=xy[0][1];
+            xy[0][1]=p.eval(0);         //Tomamos como nueva aproximación el punto donde el polinomio interpolador inverso se anule.
+            i++;
+        }
+        return 0;
+    }
 }
