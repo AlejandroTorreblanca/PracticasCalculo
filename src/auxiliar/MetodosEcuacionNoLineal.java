@@ -201,7 +201,7 @@ public class MetodosEcuacionNoLineal {
     }
 
 
-    public static double newtonRaizMultiple(Funcion f, double x, double prec,            int nmaxit) throws ERROR {
+    public static double newtonRaizMultiple(Funcion f, double x, double prec, int nmaxit) throws ERROR {
         double xx = x;
         double h;
         double aux;
