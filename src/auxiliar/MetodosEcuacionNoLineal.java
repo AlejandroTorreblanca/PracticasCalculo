@@ -452,20 +452,21 @@ public class MetodosEcuacionNoLineal {
     {
         double[][] xy=new double[3][2];
         int i=0;
-        xy[0][0]=x0;
-        xy[1][0]=x1;
-        xy[2][0]=x2;
-        xy[0][1]=f.eval(x0);
-        xy[1][1]=f.eval(x1);
-        xy[2][1]=f.eval(x2);
-        if(xy[0][1]<tolerancia)
+        xy[0][1]=x0;
+        xy[1][1]=x1;
+        xy[2][1]=x2;
+        xy[0][0]=f.eval(x0);
+        xy[1][0]=f.eval(x1);
+        xy[2][0]=f.eval(x2);
+        System.out.println(f.eval(x0)+" "+f.eval(x1)+" "+f.eval(x2));
+        if(Math.abs(xy[0][0])<tolerancia)
             return xy[0][1];
-        if(xy[1][1]<tolerancia)
+        if(Math.abs(xy[1][0])<tolerancia)
             return xy[1][1];
-        if(xy[2][1]<tolerancia)
+        if(Math.abs(xy[2][0])<tolerancia)
             return xy[2][1];
-        
-        while(xy[0][1]<tolerancia)
+        System.out.println("ssddd");
+        while(Math.abs(xy[0][0])>=tolerancia)
         {
             if(i>nmaxiteraciones)
             {
@@ -473,11 +474,15 @@ public class MetodosEcuacionNoLineal {
                 System.exit(1);
             }
             PolinomioInterpolador p=new PolinomioInterpolador(xy);
-            xy[0][3]=xy[0][2];
-            xy[0][2]=xy[0][1];
+            xy[2][1]=xy[1][1];
+            xy[2][0]=xy[1][0];
+            xy[1][1]=xy[0][1];
+            xy[1][0]=xy[0][0];
             xy[0][1]=p.eval(0);         //Tomamos como nueva aproximación el punto donde el polinomio interpolador inverso se anule.
+            xy[0][0]=f.eval(xy[0][1]);
+            System.out.println(i+": "+xy[0][0]);
             i++;
         }
-        return 0;
+        return xy[0][1];
     }
 }

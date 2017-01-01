@@ -62,7 +62,7 @@ public class Ejercico1 {
         double aux1, aux2;    
         double[] coef= {-1,0,0,1};
         Polinomio p=new Polinomio(coef);
-        PanelDibujo pd = new PanelDibujo("Ejercicio 2 práctica 6");
+        PanelDibujo pd = new PanelDibujo("Ejercicio 1 de la Segunda Entrega.");
         /*
          * Una buena estrategia para evitar dejar progamas en ejecucion es crear
          * un "listener" (modulo de escucha) sobre la cruz de cerrar la ventana del panel de dibujo
@@ -85,7 +85,7 @@ public class Ejercico1 {
         Complex raiz=new Complex();
         pd.addEjesCoordenados(true,xinf, xsup,yinf,ysup,0,0);
         
-        //He dedidido dibujar por separado cada uno de los cuatro cuadrantes, el código es el mismo las cuatro veces, cambiando
+        //He decidido dibujar por separado cada uno de los cuatro cuadrantes, el código es el mismo las cuatro veces, cambiando
         //los arrays en donde guardo los puntos a colorear.
         
         double[][] xy11= new double[30977][2];
@@ -97,13 +97,9 @@ public class Ejercico1 {
             for (double k = -1.*numPuntos; k <= 0; k++) 
             {
                 x=new Complex(j/numPuntos, k/numPuntos);
-                try 
-                {
+                try {
                     raiz= newton(p, x);
-                    //System.out.println(raiz);
-                } catch (ERROR ex) 
-                {
-                }
+                } catch (ERROR ex) {}
                 
                 aux1=raiz1RE-raiz.re();
                 aux2=raiz1IM-raiz.im();
@@ -140,7 +136,6 @@ public class Ejercico1 {
                 i++;
             }
         }
-        System.out.println("    "+i);
         pd.addListaPuntos(Color.blue, xy11, 1);
         pd.addListaPuntos(Color.red, xy21, 1);
         pd.addListaPuntos(Color.green, xy31, 1);
@@ -151,7 +146,7 @@ public class Ejercico1 {
         double[][] xy32= new double[30977][2];
         double[][] xy42= new double[30977][2];
         i=0;
-        for (double j = 0.; j <= numPuntos; j++) {        //Recorremos los puntos del tercer cuadrante.
+        for (double j = 0.; j <= numPuntos; j++) {        //Recorremos los puntos del cuarto cuadrante.
             for (double k = -numPuntos; k <= 0; k++) 
             {
                 x=new Complex(j/numPuntos, k/numPuntos);
