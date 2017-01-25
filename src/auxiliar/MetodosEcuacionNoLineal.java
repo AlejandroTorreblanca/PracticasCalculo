@@ -438,8 +438,6 @@ public class MetodosEcuacionNoLineal {
         throw new ERROR();
     }
 
-
-
     // Excepcion ERROR para ser devuelta por los metodos de la clase
     public static class ERROR extends Exception {
 
@@ -458,14 +456,13 @@ public class MetodosEcuacionNoLineal {
         xy[0][0]=f.eval(x0);
         xy[1][0]=f.eval(x1);
         xy[2][0]=f.eval(x2);
-        System.out.println(f.eval(x0)+" "+f.eval(x1)+" "+f.eval(x2));
+        //System.out.println(f.eval(x0)+" "+f.eval(x1)+" "+f.eval(x2));
         if(Math.abs(xy[0][0])<tolerancia)
             return xy[0][1];
         if(Math.abs(xy[1][0])<tolerancia)
             return xy[1][1];
         if(Math.abs(xy[2][0])<tolerancia)
             return xy[2][1];
-        System.out.println("ssddd");
         while(Math.abs(xy[0][0])>=tolerancia)
         {
             if(i>nmaxiteraciones)
